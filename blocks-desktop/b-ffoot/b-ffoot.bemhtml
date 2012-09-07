@@ -1,0 +1,7 @@
+block b-ffoot {
+    content: {
+        elem: 'inner',
+        mix: [{ block: 'i-clearfix' }],
+        content: this.ctx.content
+    }
+}

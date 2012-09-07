@@ -1,0 +1,28 @@
+html,
+body
+{
+    height: 100%;
+}
+
+:visited
+{
+    color: #1A3DC1;
+}
+
+.b-wrapper
+{
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -182px;
+}
+
+.b-wrapper__push
+{
+    height: 182px;
+}
+
+.b-page
+{
+    padding: 0;
+}

@@ -1,0 +1,20 @@
+.b-static-text,
+.b-static-text p
+{
+    line-height: 1.6em;
+}
+
+.b-static-text
+{
+    display: none;
+}
+
+.b-static-text h3:first-child
+{
+    margin-top: 0;
+}
+
+.b-static-text_visible_yes
+{
+    display: block;
+}

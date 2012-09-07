@@ -1,0 +1,18 @@
+.b-layout
+{
+    width: 980px;
+    margin: 0 auto;
+}
+
+.b-layout__left
+{
+    float: left;
+
+    width: 22%;
+}
+
+.b-layout__right
+{
+    padding: 0 0 0 45px;
+    overflow: hidden;
+}

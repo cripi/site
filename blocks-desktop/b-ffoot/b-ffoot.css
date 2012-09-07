@@ -1,0 +1,50 @@
+.b-ffoot
+{
+    position: relative;
+
+    margin-top: 38px;
+    padding: 25px 0;
+    height: 93px;
+    line-height: 1.6;
+
+    border-top: 1px solid #ccc;
+    background-color: #fff;
+    background: -webkit-linear-gradient(top, #eee, #ffffff);
+    background:    -moz-linear-gradient(top, #eee, #ffffff);
+    background:     -ms-linear-gradient(top, #eee, #ffffff);
+    background:      -o-linear-gradient(top, #eee, #ffffff);
+    background:         linear-gradient(to bottom, #eee, #ffffff); 
+    color: #777;
+}
+
+.b-ffoot__inner
+{
+    width: 980px;
+    margin: 0 auto;
+}
+
+.b-ffoot:after
+{
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+
+    width: 100%;
+    height: 1px;
+    content: '';
+
+    background: #fefefe;
+}
+
+.b-ffoot__contacts,
+.b-ffoot__copyright-logos
+{
+    float: left;
+    width: 50%;
+}
+
+.b-ffoot__copyright-logos
+{
+    text-align: right;
+}
