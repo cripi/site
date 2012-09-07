@@ -137,6 +137,10 @@ exports.deps = [
         "elem": "js"
     },
     {
+        "block": "b-page",
+        "elem": "meta"
+    },
+    {
         "block": "b-wrapper"
     },
     {

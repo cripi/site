@@ -109,7 +109,7 @@ $.inheritSelf = function(base, props, staticProps) {
 
 };
 
-})(jQuery);
+})(jQuery);;
 /* ../../lego/bem-bl/blocks-common/i-jquery/__inherit/i-jquery__inherit.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-jquery/__identify/i-jquery__identify.js: begin */ /**/
@@ -145,7 +145,7 @@ $.identify = function(obj, onlyGet) {
 
 };
 
-})(jQuery);
+})(jQuery);;
 /* ../../lego/bem-bl/blocks-common/i-jquery/__identify/i-jquery__identify.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-jquery/__is-empty-object/i-jquery__is-empty-object.js: begin */ /**/
@@ -157,7 +157,7 @@ $.isEmptyObject || ($.isEmptyObject = function(obj) {
     });
 
 })(jQuery);
-
+;
 /* ../../lego/bem-bl/blocks-common/i-jquery/__is-empty-object/i-jquery__is-empty-object.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-jquery/__debounce/i-jquery__debounce.js: begin */ /**/
@@ -229,7 +229,7 @@ $.extend({
 
 });
 
-})(jQuery);
+})(jQuery);;
 /* ../../lego/bem-bl/blocks-common/i-jquery/__debounce/i-jquery__debounce.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-jquery/__observable/i-jquery__observable.js: begin */ /**/
@@ -433,7 +433,7 @@ var storageExpando = '__' + +new Date + 'storage',
 
 $.observable = $.inherit(Observable, Observable);
 
-})(jQuery);
+})(jQuery);;
 /* ../../lego/bem-bl/blocks-common/i-jquery/__observable/i-jquery__observable.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-bem/i-bem.js: begin */ /**/
@@ -1165,7 +1165,7 @@ this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
 
 });
 
-})(jQuery);
+})(jQuery);;
 /* ../../lego/bem-bl/blocks-common/i-bem/i-bem.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-ecma/__object/i-ecma__object.js: begin */ /**/
@@ -1185,7 +1185,7 @@ Object.keys || (Object.keys = function(obj) {
     return res;
 });
 
-})();
+})();;
 /* ../../lego/bem-bl/blocks-common/i-ecma/__object/i-ecma__object.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-ecma/__array/i-ecma__array.js: begin */ /**/
@@ -1347,7 +1347,7 @@ Array.isArray || (Array.isArray = function(obj) {
     return toStr.call(obj) === '[object Array]';
 });
 
-})();
+})();;
 /* ../../lego/bem-bl/blocks-common/i-ecma/__array/i-ecma__array.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-ecma/__function/i-ecma__function.js: begin */ /**/
@@ -1366,7 +1366,7 @@ Function.prototype.bind || (Function.prototype.bind = function(ctx) {
 
 });
 
-})();
+})();;
 /* ../../lego/bem-bl/blocks-common/i-ecma/__function/i-ecma__function.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-bem/__internal/i-bem__internal.js: begin */ /**/
@@ -1527,7 +1527,7 @@ BEM.INTERNAL = {
 
 }
 
-})(BEM, jQuery);
+})(BEM, jQuery);;
 /* ../../lego/bem-bl/blocks-common/i-bem/__internal/i-bem__internal.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-jquery/__cookie/i-jquery__cookie.js: begin */ /**/
@@ -1626,7 +1626,7 @@ jQuery.cookie = function(name, value, options) {
         }
         return cookieValue;
     }
-};
+};;
 /* ../../lego/bem-bl/blocks-common/i-jquery/__cookie/i-jquery__cookie.js: end */ /**/
 
 /* ../../lego/blocks-desktop/i-bem/html/i-bem__html.js: begin */ /**/
@@ -2248,7 +2248,7 @@ BEM.HTML = {
 };
 
 })(BEM, jQuery);
-
+;
 /* ../../lego/blocks-desktop/i-bem/html/i-bem__html.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-ecma/__json/i-ecma__json.js: begin */ /**/
@@ -2312,7 +2312,7 @@ window.JSON = {
     }
 };
 })();
-
+;
 /* ../../lego/bem-bl/blocks-common/i-ecma/__json/i-ecma__json.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-bem/__dom/i-bem__dom.js: begin */ /**/
@@ -3963,7 +3963,7 @@ var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
 });
 
 })(BEM, jQuery);
-
+;
 /* ../../lego/bem-bl/blocks-common/i-bem/__dom/i-bem__dom.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-ecma/__string/i-ecma__string.js: begin */ /**/
@@ -3981,7 +3981,7 @@ String.prototype.trim || (String.prototype.trim = function () {
 
 });
 
-})();
+})();;
 /* ../../lego/bem-bl/blocks-common/i-ecma/__string/i-ecma__string.js: end */ /**/
 
 /* ../../lego/blocks-common/i-common/check-session/i-common__check-session.js: begin */ /**/
@@ -3996,7 +3996,7 @@ Lego.isSessionValid = function() {
     return !!Lego.getCookie('yandex_login');
 }
 })(window.Lego);
-
+;
 /* ../../lego/blocks-common/i-common/check-session/i-common__check-session.js: end */ /**/
 
 /* ../../lego/blocks-common/i-global/i-global.js: begin */ /**/
@@ -4053,7 +4053,7 @@ BEM.DOM.decl('i-global', {
     }
 
 });
-
+;
 /* ../../lego/blocks-common/i-global/i-global.js: end */ /**/
 
 /* ../../lego/blocks-common/i-counter/i-counter.js: begin */ /**/
@@ -4202,7 +4202,7 @@ Lego.ch = function(p, a) {
 }
 
 })(window.Lego);
-
+;
 /* ../../lego/blocks-common/i-counter/i-counter.js: end */ /**/
 
 /* ../../lego/blocks-common/i-common/cookie/i-common__cookie.js: begin */ /**/
@@ -4223,7 +4223,7 @@ Lego.getCookie = function(n) {
 }
 
 })(window.Lego);
-
+;
 /* ../../lego/blocks-common/i-common/cookie/i-common__cookie.js: end */ /**/
 
 /* ../../lego/blocks-common/i-common/init/i-common__init.js: begin */ /**/
@@ -4292,7 +4292,7 @@ Lego.blockInit || (Lego.blockInit = function(context, blockSelector) {
 Lego.blockInitBinded || (Lego.blockInitBinded = !!$(document).ready(function(){ Lego.blockInit() }));
 
 })(jQuery, window.Lego);
-
+;
 /* ../../lego/blocks-common/i-common/init/i-common__init.js: end */ /**/
 
 /* ../../lego/blocks-common/i-common/i-common.js: begin */ /**/
@@ -4305,14 +4305,14 @@ Lego.message = function(id, text) {
     return Lego.params.locale == 'ru' ? text : (Lego.messages[id] || text);
 };
 
-})(window.Lego);
+})(window.Lego);;
 /* ../../lego/blocks-common/i-common/i-common.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-bem/__dom/_init/i-bem__dom_init_auto.js: begin */ /**/
 /* дефолтная инициализация */
 $(function() {
     BEM.DOM.init();
-});
+});;
 /* ../../lego/bem-bl/blocks-common/i-bem/__dom/_init/i-bem__dom_init_auto.js: end */ /**/
 
 /* ../../blocks-desktop/b-page/b-page.js: begin */ /**/
@@ -4383,7 +4383,7 @@ BEM.DOM.decl('b-page', {
         this._texts[this._current].delMod('visible')
     }
 });
-
+;
 /* ../../blocks-desktop/b-page/b-page.js: end */ /**/
 
 /* ../../lego/bem-bl/blocks-common/i-jquery/__leftclick/i-jquery__leftclick.js: begin */ /**/
@@ -4426,7 +4426,7 @@ var leftClick = $.event.special.leftclick = {
 
 };
 
-})(jQuery);
+})(jQuery);;
 /* ../../lego/bem-bl/blocks-common/i-jquery/__leftclick/i-jquery__leftclick.js: end */ /**/
 
 /* ../../lego/blocks-desktop/b-link/b-link.js: begin */ /**/
@@ -4443,7 +4443,7 @@ BEM.HTML.decl('b-link', {
         while(p = props.pop()) ctx.param(p) && (ctx.attr(p, ctx.param(p)));
     }
 });
-
+;
 /* ../../lego/blocks-desktop/b-link/b-link.js: end */ /**/
 
 /* ../../lego/blocks-desktop/b-icon/b-icon.js: begin */ /**/
@@ -4465,7 +4465,7 @@ BEM.HTML.decl('b-icon', {
     }
 
 });
-
+;
 /* ../../lego/blocks-desktop/b-icon/b-icon.js: end */ /**/
 
 

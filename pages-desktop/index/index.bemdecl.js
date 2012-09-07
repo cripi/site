@@ -7,6 +7,9 @@ exports.blocks = [
             },
             {
                 "name": "js"
+            },
+            {
+                "name": "meta"
             }
         ]
     },
