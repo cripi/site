@@ -577,7 +577,7 @@
                                 elem: 'logo',
                                 content: {
                                     block: 'b-link',
-                                    url: 'http://skbcontur.ru',
+                                    url: 'http://skbkontur.ru',
                                     content: {
                                         block: 'b-icon',
                                         url: '/images/kontur-logo.png'
