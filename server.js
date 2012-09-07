@@ -1,7 +1,7 @@
 // Nodejitsu
 var httpServer = require('http-server');
 
-var port = 8080,
+var port = 80,
     host = '0.0.0.0';
 
 var options = {
