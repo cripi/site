@@ -186,6 +186,15 @@ exports.deps = [
         "block": "b-link"
     },
     {
+        "block": "b-link",
+        "mod": "logo"
+    },
+    {
+        "block": "b-link",
+        "mod": "logo",
+        "val": "yandex"
+    },
+    {
         "block": "b-static-text"
     },
     {
@@ -202,10 +211,6 @@ exports.deps = [
     {
         "block": "b-ffoot",
         "elem": "copyright-logos"
-    },
-    {
-        "block": "b-ffoot",
-        "elem": "logo"
     },
     {
         "block": "b-icon"

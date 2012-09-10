@@ -584,25 +584,20 @@
                         elem: 'copyright-logos',
                         content: [
                             {
-                                elem: 'logo',
+                                block: 'b-link',
+                                mods: {'logo': 'yandex'},
+                                url: 'http://yandex.ru',
                                 content: {
-                                    block: 'b-link',
-                                    url: 'http://yandex.ru',
-                                    content: {
-                                        block: 'b-icon',
-                                        url: 'http://cripi.ru/images/yandex-small.png'
-                                    }
+                                    block: 'b-icon',
+                                    url: '/images/yandex-small.png'
                                 }
                             },
                             {
-                                elem: 'logo',
+                                block: 'b-link',
+                                url: 'http://skbkontur.ru',
                                 content: {
-                                    block: 'b-link',
-                                    url: 'http://skbkontur.ru',
-                                    content: {
-                                        block: 'b-icon',
-                                        url: '/images/kontur-logo.png'
-                                    }
+                                    block: 'b-icon',
+                                    url: '/images/kontur-logo.png'
                                 }
                             }
                         ]

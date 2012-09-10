@@ -27,6 +27,8 @@ LEGO_PREFIX = lego/
 # раскомментируйте следующую строку
 #GENERATE_COMMON_BUNDLE = true
 
+LEVEL_PAGES_EXCLUDE := pages-desktop/index/images pages-desktop/index/documents
+
 # В следующей строке можно задать имя бандла со статикой
 #COMMON_BUNDLE_NAME = common
 

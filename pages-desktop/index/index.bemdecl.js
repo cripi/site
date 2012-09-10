@@ -61,7 +61,15 @@ exports.blocks = [
         ]
     },
     {
-        "name": "b-link"
+        "name": "b-link",
+        "mods": [
+            {
+                "name": "logo",
+                "vals": [
+                    "yandex"
+                ]
+            }
+        ]
     },
     {
         "name": "b-static-text"
@@ -77,9 +85,6 @@ exports.blocks = [
             },
             {
                 "name": "copyright-logos"
-            },
-            {
-                "name": "logo"
             }
         ]
     },

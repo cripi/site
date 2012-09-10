@@ -48,3 +48,14 @@
 {
     text-align: right;
 }
+
+.b-ffoot__copyright-logos .b-link,
+.b-ffoot__copyright-logos .b-link .b-icon
+{
+    vertical-align: middle;
+}
+
+.b-ffoot__copyright-logos .b-link_logo_yandex
+{
+    margin-right: 40px;
+}
