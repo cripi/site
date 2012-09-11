@@ -585,6 +585,15 @@
                         content: [
                             {
                                 block: 'b-link',
+                                mods: {'logo': 'kontur'},
+                                url: 'http://skbkontur.ru',
+                                content: {
+                                    block: 'b-icon',
+                                    url: '/images/kontur-logo.png'
+                                }
+                            },
+                            {
+                                block: 'b-link',
                                 mods: {'logo': 'yandex'},
                                 url: 'http://yandex.ru',
                                 content: {
@@ -592,14 +601,6 @@
                                     url: '/images/yandex-small.png'
                                 }
                             },
-                            {
-                                block: 'b-link',
-                                url: 'http://skbkontur.ru',
-                                content: {
-                                    block: 'b-icon',
-                                    url: '/images/kontur-logo.png'
-                                }
-                            }
                         ]
                     }
                 ]

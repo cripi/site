@@ -66,6 +66,7 @@ exports.blocks = [
             {
                 "name": "logo",
                 "vals": [
+                    "kontur",
                     "yandex"
                 ]
             }

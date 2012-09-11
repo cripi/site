@@ -192,6 +192,11 @@ exports.deps = [
     {
         "block": "b-link",
         "mod": "logo",
+        "val": "kontur"
+    },
+    {
+        "block": "b-link",
+        "mod": "logo",
         "val": "yandex"
     },
     {
