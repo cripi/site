@@ -1,1 +1,4699 @@
-(function(){this._ycssjs||(this._ycssjs=function(a,b){return !(a in _ycssjs||_ycssjs[a]++)})})();if(_ycssjs("vB2eFkb0LNlDHsrRTm0QVxFwlQQ")){(function(e){var b=(function(){_}).toString().indexOf("_")>-1,a=e.browser.msie,c=a?["toString","valueOf"]:null,f=function(){};function d(h,g,i){var k=false;if(a){var j=[];e.each(c,function(){i.hasOwnProperty(this)&&(k=true)&&j.push({name:this,val:i[this]})});if(k){e.each(i,function(l){j.push({name:l,val:this})});i=j}}e.each(i,function(m,n){if(k){m=n.name;n=n.val}if(e.isFunction(n)&&(!b||n.toString().indexOf(".__base")>-1)){var l=h[m]||function(){};g[m]=function(){var p=this.__base;this.__base=l;var o=n.apply(this,arguments);this.__base=p;return o}}else{g[m]=n}})}e.inherit=function(){var l=arguments,n=e.isFunction(l[0]),h=n?l[0]:f,m=l[n?1:0]||{},j=l[n?2:1],o=m.__constructor||(n&&h.prototype.__constructor)?function(){return this.__constructor.apply(this,arguments)}:function(){};if(!n){o.prototype=m;o.prototype.__self=o.prototype.constructor=o;return e.extend(o,j)}e.extend(o,h);var i=function(){},k=i.prototype=h.prototype,g=o.prototype=new i();g.__self=g.constructor=o;d(k,g,m);j&&d(h,o,j);return o};e.inheritSelf=function(j,h,i){var g=j.prototype;d(g,g,h);i&&d(j,j,i);return j}})(jQuery);(function(c){var a=0,d="__"+(+new Date),b=function(){return"uniq"+ ++a};c.identify=function(g,f){if(!g){return b()}var e="uniqueID" in g?"uniqueID":d;return f||e in g?g[e]:g[e]=b()}})(jQuery);(function(a){a.isEmptyObject||(a.isEmptyObject=function(c){for(var b in c){return false}return true})})(jQuery);(function(a){a.extend({debounce:function(c,d,e,b){if(arguments.length==3&&typeof e!="boolean"){b=e;e=false}var f;return function(){var g=arguments;b=b||this;e&&!f&&c.apply(b,g);clearTimeout(f);f=setTimeout(function(){e||c.apply(b,g);f=null},d)}},throttle:function(e,f,b){var g,d,c;return function(){d=arguments;c=true;b=b||this;g||(function(){if(c){e.apply(b,d);c=false;g=setTimeout(arguments.callee,f)}else{g=null}})()}}})})(jQuery);(function(d){var a="__"+ +new Date+"storage",c=function(f,e){return d.identify(f)+(e?d.identify(e):"")},b={buildEventName:function(f){return f},on:function(o,j,p,s,m){if(typeof o=="string"){if(d.isFunction(j)){s=p;p=j;j=undefined}var f=c(p,s),l=this[a]||(this[a]={}),g=o.split(" "),h=0,q;while(o=g[h++]){o=this.buildEventName(o);q=l[o]||(l[o]={ids:{},list:{}});if(!(f in q.ids)){var n=q.list,r={fn:p,data:j,ctx:s,special:m};if(n.last){n.last.next=r;r.prev=n.last}else{n.first=r}q.ids[f]=n.last=r}}}else{var k=this;d.each(o,function(t,i){k.on(t,i,j,m)})}return this},onFirst:function(i,h,g,f){return this.on(i,h,g,f,{one:true})},un:function(p,q,t){if(typeof p=="string"||typeof p=="undefined"){var n=this[a];if(n){if(p){var h=p.split(" "),k=0,r;while(p=h[k++]){p=this.buildEventName(p);if(r=n[p]){if(q){var g=c(q,t),f=r.ids;if(g in f){var o=r.list,s=f[g],j=s.prev,l=s.next;if(j){j.next=l}else{if(s===o.first){o.first=l}}if(l){l.prev=j}else{if(s===o.last){o.last=j}}delete f[g]}}else{delete this[a][p]}}}}else{delete this[a]}}}else{var m=this;d.each(p,function(u,i){m.un(u,i,t)})}return this},trigger:function(j,h){var l=this,k=l[a],i;typeof j==="string"?j=d.Event(l.buildEventName(i=j)):j.type=l.buildEventName(i=j.type);j.target||(j.target=l);if(k&&(k=k[j.type])){var g=k.list.first,f;while(g){j.data=g.data;f=g.fn.call(g.ctx||l,j,h);if(typeof f!=="undefined"){j.result=f;if(f===false){j.preventDefault();j.stopPropagation()}}g.special&&g.special.one&&l.un(i,g.fn,g.ctx);g=g.next}}return this}};d.observable=d.inherit(b,b)})(jQuery);(function(f,h){var e=[],g={},a={};function d(k,j,i){return(k?"__elem_"+k:"")+"__mod"+(j?"_"+j:"")+(i?"_"+i:"")}function c(j,i,k){f.isFunction(j)?(i[d(k,"*","*")]=j):f.each(j,function(m,l){f.isFunction(l)?(i[d(k,m,"*")]=l):f.each(l,function(n,o){i[d(k,m,n)]=o})})}function b(j,i){return i?Array.isArray(i)?function(m){var l=0,k=i.length;while(l<k){if(m.hasMod(j,i[l++])){return true}}return false}:function(k){return k.hasMod(j,i)}:function(k){return k.hasMod(j)}}this.BEM=f.inherit(f.observable,{__constructor:function(j,k,i){var l=this;l._modCache=j||{};l._processingMods={};l._params=k;l.params=null;i!==false?l._init():l.afterCurrentEvent(function(){l._init()})},_init:function(){if(!this._initing&&!this.hasMod("js","inited")){this._initing=true;this.params=f.extend(this.getDefaultParams(),this._params);delete this._params;this.setMod("js","inited");delete this._initing;this.trigger("init")}return this},changeThis:function(j,i){return j.bind(i||this)},afterCurrentEvent:function(j,i){this.__self.afterCurrentEvent(this.changeThis(j,i))},trigger:function(j,i){this.__base(j=this.buildEvent(j),i).__self.trigger(j,i);return this},buildEvent:function(i){typeof i=="string"&&(i=f.Event(i));i.block=this;return i},hasMod:function(l,m,j){var i=arguments.length,n=false;if(i==1){j="";m=l;l=h;n=true}else{if(i==2){if(typeof l=="string"){j=m;m=l;l=h}else{j="";n=true}}}var k=this.getMod(l,m)===j;return n?!k:k},getMod:function(k,l){var i=typeof k;if(i==="string"||i==="undefined"){l=k||l;var j=this._modCache;return l in j?j[l]:j[l]=this._extractModVal(l)}return this._getElemMod(l,k)},_getElemMod:function(k,i,j){return this._extractModVal(k,i,j)},getMods:function(l){var j=l&&typeof l!="string",m=this,i=[].slice.call(arguments,j?1:0),k=m._extractMods(i,j?l:h);if(!j){i.length?i.forEach(function(n){m._modCache[n]=k[n]}):m._modCache=k}return k},setMod:function(k,p,q){if(typeof q=="undefined"){q=p;p=k;k=h}var l=this;if(!k||k[0]){var m=(k&&k[0]?f.identify(k[0]):"")+"_"+p;if(this._processingMods[m]){return l}var j,n=k?l._getElemMod(p,k,j=l.__self._extractElemNameFrom(k)):l.getMod(p);if(n===q){return l}this._processingMods[m]=true;var i=true,o=[p,q,n];k&&o.unshift(k);[["*","*"],[p,"*"],[p,q]].forEach(function(r){i=l._callModFn(j,r[0],r[1],o)!==false&&i});!k&&i&&(l._modCache[p]=q);i&&l._afterSetMod(p,q,n,k,j);delete this._processingMods[m]}return l},_afterSetMod:function(l,i,m,j,k){},toggleMod:function(k,l,j,n,m){if(typeof k=="string"){m=n;n=j;j=l;l=k;k=h}if(typeof n=="undefined"){n=""}else{if(typeof n=="boolean"){m=n;n=""}}var i=this.getMod(k,l);(i==j||i==n)&&this.setMod(k,l,typeof m==="boolean"?(m?j:n):this.hasMod(k,l,j)?n:j);return this},delMod:function(i,j){if(!j){j=i;i=h}return this.setMod(i,j,"")},_callModFn:function(l,k,i,j){var m=d(l,k,i);return this[m]?this[m].apply(this,j):h},_extractModVal:function(j,i){return""},_extractMods:function(i,j){return{}},channel:function(j,i){return this.__self.channel(j,i)},getDefaultParams:function(){return{}},del:function(j){var i=[].slice.call(arguments);typeof j=="string"&&i.unshift(this);this.__self.del.apply(this.__self,i);return this},destruct:function(){}},{_name:"i-bem",blocks:g,decl:function(j,k,m){if(typeof j=="string"){j={block:j}}else{if(j.name){j.block=j.name}}if(j.baseBlock&&!g[j.baseBlock]){throw ('baseBlock "'+j.baseBlock+'" for "'+j.block+'" is undefined')}k||(k={});if(k.onSetMod){c(k.onSetMod,k);delete k.onSetMod}if(k.onElemSetMod){f.each(k.onElemSetMod,function(p,o){c(o,k,p)});delete k.onElemSetMod}var l=g[j.baseBlock||j.block]||this;if(j.modName){var i=b(j.modName,j.modVal);f.each(k,function(o,p){f.isFunction(p)&&(k[o]=function(){var r;if(i(this)){r=p}else{var q=l.prototype[o];q&&q!==k[o]&&(r=this.__base)}return r?r.apply(this,arguments):h})})}var n;j.block==l._name?(n=f.inheritSelf(l,k,m))._processLive(true):(n=g[j.block]=f.inherit(l,k,m))._name=j.block;return n},_processLive:function(i){return false},create:function(j,i){typeof j=="string"&&(j={block:j});return new g[j.block](j.mods,i)},getName:function(){return this._name},_extractElemNameFrom:function(i){},afterCurrentEvent:function(j,i){e.push({fn:j,ctx:i})==1&&setTimeout(this._runAfterCurrentEventFns,0)},_runAfterCurrentEventFns:function(){var j=e.length;if(j){var i,k=e.splice(0,j);while(i=k.shift()){i.fn.call(i.ctx||this)}}},changeThis:function(j,i){return j.bind(i||this)},del:function(m){var l=typeof m=="string",k=l?0:1,j=arguments.length;l&&(m=this);while(k<j){delete m[arguments[k++]]}return this},channel:function(j,i){if(typeof j=="boolean"){i=j;j=h}j||(j="default");if(i){if(a[j]){a[j].un();delete a[j]}return}return a[j]||(a[j]=new f.observable())}})})(jQuery);(function(){Object.keys||(Object.keys=function(c){var b=[];for(var a in c){c.hasOwnProperty(a)&&b.push(a)}return b})})();(function(){var a=Array.prototype,d=Object.prototype.toString,b={indexOf:function(h,g){g=+(g||0);var f=this,e=f.length;if(e>0&&g<e){g=g<0?Math.ceil(g):Math.floor(g);g<-e&&(g=0);g<0&&(g=g+e);while(g<e){if(g in f&&f[g]===h){return g}++g}}return -1},forEach:function(j,f){var h=-1,g=this,e=g.length;while(++h<e){h in g&&(f?j.call(f,g[h],h,g):j(g[h],h,g))}},map:function(k,f){var j=-1,h=this,e=h.length,g=new Array(e);while(++j<e){j in h&&(g[j]=f?k.call(f,h[j],j,h):k(h[j],j,h))}return g},filter:function(k,f){var j=-1,h=this,e=h.length,g=[];while(++j<e){j in h&&(f?k.call(f,h[j],j,h):k(h[j],j,h))&&g.push(h[j])}return g},reduce:function(k,j){var h=-1,g=this,e=g.length,f;if(arguments.length<2){while(++h<e){if(h in g){f=g[h];break}}}else{f=j}while(++h<e){h in g&&(f=k(f,g[h],h,g))}return f},some:function(j,f){var h=-1,g=this,e=g.length;while(++h<e){if(h in g&&(f?j.call(f,g[h],h,g):j(g[h],h,g))){return true}}return false},every:function(j,f){var h=-1,g=this,e=g.length;while(++h<e){if(h in g&&!(f?j.call(f,g[h],h,g):j(g[h],h,g))){return false}}return true}};for(var c in b){a[c]||(a[c]=b[c])}Array.isArray||(Array.isArray=function(e){return d.call(e)==="[object Array]"})})();(function(){var a=Array.prototype.slice;Function.prototype.bind||(Function.prototype.bind=function(b){var d=this,c=a.call(arguments,1);return function(){return d.apply(b,c.concat(a.call(arguments)))}})})();(function(i,b,a){var g="_",c="__",d="[a-zA-Z0-9-]+";function e(l,j,k){k.push(g,l,g,j)}function f(l,m,j,k){k.push(l);j&&e(m,j,k)}function h(n,l,m,j,k){f(n,a,a,k);k.push(c,l);j&&e(m,j,k)}i.INTERNAL={NAME_PATTERN:d,MOD_DELIM:g,ELEM_DELIM:c,buildModPostfix:function(m,j,k){var l=k||[];e(m,j,l);return k?l:l.join("")},buildClass:function(p,n,o,j,k){var m=typeof o;if(m=="string"){if(typeof j!="string"){k=j;j=o;o=n;n=a}}else{if(m!="undefined"){k=o;o=a}else{if(n&&typeof n!="string"){k=n;n=a}}}if(!(n||o||k)){return p}var l=k||[];n?h(p,n,o,j,l):f(p,o,j,l);return k?l:l.join("")},buildClasses:function(n,m,l,j){if(m&&typeof m!="string"){j=l;l=m;m=a}var k=j||[];m?h(n,m,a,a,k):f(n,a,a,k);l&&b.each(l,function(p,o){if(o){k.push(" ");m?h(n,m,p,o,k):f(n,p,o,k)}});return j?k:k.join("")}}})(BEM,jQuery);jQuery.cookie=function(b,j,m){if(typeof j!="undefined"){m=m||{};if(j===null){j="";m.expires=-1}var e="";if(m.expires&&(typeof m.expires=="number"||m.expires.toUTCString)){var f;if(typeof m.expires=="number"){f=new Date();f.setTime(f.getTime()+(m.expires*24*60*60*1000))}else{f=m.expires}e="; expires="+f.toUTCString()}var l=m.path?"; path="+(m.path):"";var g=m.domain?"; domain="+(m.domain):"";var a=m.secure?"; secure":"";document.cookie=[b,"=",encodeURIComponent(j),e,l,g,a].join("")}else{var d=null;if(document.cookie&&document.cookie!=""){var k=document.cookie.split(";");for(var h=0;h<k.length;h++){var c=jQuery.trim(k[h]);if(c.substring(0,b.length+1)==(b+"=")){d=decodeURIComponent(c.substring(b.length+1));break}}}return d}};(function(o,g,e){var k=o.INTERNAL,j=k.ELEM_DELIM,l={area:1,base:1,br:1,col:1,command:1,embed:1,hr:1,img:1,input:1,keygen:1,link:1,meta:1,param:1,source:1,wbr:1},f=k.buildClass,m=k.buildClasses,n={};function i(p,q,r){(p[q]||(p[q]=[])).unshift(r)}function d(p,q){return q.modName?function(r){(r._curBlock.mods||{})[q.modName]===q.modVal&&p(r)}:p}function c(q,p){var s=g.isArray(p),r;g.isArray(q)?s?r=q.concat(p):(r=q).push(p):s?(r=p).unshift(q):r=[q,p];return r}var b={"'":"\\'",'"':"'","&":"&amp;","<":"&lt;",">":"&gt;"},a=/['"&<>]/g;function h(p){return p.replace(a,function(q){return b[q]})}o.HTML={decl:function(r,q){typeof r=="string"&&(r={block:r});r.name&&(r.block=r.name);var p=n[r.block]||(n[r.block]={});q.onBlock&&i(p,"_block",d(q.onBlock,r));if(q.onElem){g.isFunction(q.onElem)?i(p,"_elem",d(q.onElem,r)):g.each(q.onElem,function(t,s){i(p,"_elem"+(t==="*"?"":j+t),d(s,r))})}},build:function(q){var p=new this.Ctx(q);p._buildAll();return p._flush()},Ctx:g.inherit({__constructor:function(p){this._buffer=[];this._params=p;this._tParams=null;this._tParamsChanges=null;this._curBlock=e},pos:function(){return this._params._pos},isFirst:function(){return this._params._pos===1},isLast:function(){var p=this._params;return p._pos===p._siblingsCount},params:function(p){var q=this;if(typeof p=="undefined"){return q._params}q._params=p;return q},param:function(p,s,q,u){var t=this,r=t._params;if(typeof s=="undefined"){return r[p]}if(q||!(p in r)){r[p]=s}else{if(u){r[p]=g.extend(s,r[p])}}return t},attrs:function(q,p){return this.param("attrs",q,p,true)},attr:function(q,s,r){var t=this;if(typeof s=="undefined"){return(t._params.attrs||{})[q]}var p=t._params.attrs;p?(r||!(q in p))&&(p[q]=s):(t._params.attrs={})[q]=s;return t},tag:function(q,p){return this.param("tag",q,p)},cls:function(q,p){return this.param("cls",q,p)},mods:function(q,p){return this.param("mods",q,p,true)},mod:function(p,s,r){var t=this;if(typeof s=="undefined"){return(t._params.mods||{})[p]}var q=t._params.mods;q?(r||!(p in q))&&(q[p]=s):(t._params.mods={})[p]=s;return t},mix:function(r,p){var s=this,q=s._params;if(typeof r=="undefined"){return q.mix}if(p||!("mix" in q)){q.mix=r}else{q.mix=q.mix.concat(r)}return s},js:function(p){return this.param("js",p)},content:function(q,p){return this.param("content",q,p)},wrapContent:function(p){var r=this,q=r._params;p.content=q.content;q.content=p;return r},beforeContent:function(p){var r=this,q=r._params;q.content=c(p,q.content);return r},afterContent:function(p){var r=this,q=r._params;q.content=c(q.content,p);return r},wrap:function(p){var r=this,q=r._params;p.block||(p._curBlock=r._curBlock);p.content=q._wrapper?q._wrapper:q;q._wrapper=p;return r},tParam:function(p,s){var t=this,r=t._tParams||(t._tParams={});if(typeof s=="undefined"){return r[p]}var q=t._tParamsChanges||(t._tParamsChanges={});p in q||(q[p]=r[p]);r[p]=s;return t},generateId:function(){return g.identify()},stop:function(){this._params._isStopped=true},_buildAll:function(){var w=this,q=w._buffer,v=w._params,t=typeof v;if(t=="string"||t=="number"){q.push(v)}else{if(g.isArray(v)){var s=0,p=v.length,r,u;while(s<p){w._params=r=v[s++];u=typeof r;if(u=="string"||u=="number"){q.push(r)}else{if(r){r._pos=s;r._siblingsCount=p;w._buildByDecl()}}}}else{if(v){w._params._pos=w._params._siblingsCount=1;w._buildByDecl()}}}},_build:function(){var w=this,r=w._buffer,u=w._params,p=u.tag||"div",t,s=u.block||u.elem,v=s&&(u.block||w._curBlock.block),q=false;if(u.js){(t={})[f(v,u.elem)]=u.js===true?{}:u.js;q=!u.elem}r.push("<",p);if(s||u.cls){r.push(' class="');if(s){m(v,u.elem,u.mods,r);u.mix&&g.each(u.mix,function(x,y){if(y){r.push(" ");m(y.block,y.elem,y.mods,r);if(y.js){(t||(t={}))[f(y.block,y.elem)]=y.js===true?{}:y.js;q||(q=!y.elem)}}})}u.cls&&r.push(s?" ":"",u.cls);q&&r.push(" i-bem");r.push('"')}t&&r.push(' onclick="return ',h(JSON.stringify(t)),'"');u.attrs&&g.each(u.attrs,function(x,y){typeof y!="undefined"&&y!==null&&y!==false&&r.push(" ",x,'="',y.toString().replace(/"/g,"&quot;"),'"')});if(l[p]){r.push("/>")}else{r.push(">");if(typeof u.content!="undefined"){w._params=u.content;w._buildAll()}r.push("</",p,">")}},_flush:function(){var p=this._buffer.join("");delete this._buffer;return p},_buildByDecl:function(){var s=this,v=s._curBlock,p=s._params;p._curBlock&&(s._curBlock=p._curBlock);p.block&&(s._curBlock=p);if(!p._wrapper){if(p.block||p.elem){var u=n[s._curBlock.block];if(u){var w;if(p.elem){w=u["_elem"+j+p.elem];u._elem&&(w=(w?w.concat(u._elem):u._elem))}else{w=u._block}if(w){var q=0,t;while(t=w[q++]){t(s);if(p._isStopped){break}}}}}if(p._wrapper){p._curBlock=s._curBlock;s._params=p._wrapper;return s._buildAll()}}var x=s._tParamsChanges;s._tParamsChanges=null;s._build();s._curBlock=v;if(x){var r=s._tParams;g.each(x,function(y,z){typeof z=="undefined"?delete r[y]:r[y]=z})}}})}})(BEM,jQuery);(function(c){if(window.JSON){return}var b=Object.prototype.toString,e=/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,a={"\b":"\\b","\t":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"},d;window.JSON={stringify:d=function(l){if(l===null){return"null"}if(typeof l==="undefined"){return c}switch(b.call(l)){case"[object String]":return'"'+(e.test(l)?l.replace(e,function(i){var m=a[i];return typeof m==="string"?m:"\\u"+("0000"+i.charCodeAt(0).toString(16)).slice(-4)}):l)+'"';case"[object Number]":case"[object Boolean]":return""+l;case"[object Array]":var k="[",j=0,f=l.length,h;while(j<f){h=d(l[j]);k+=(j++?",":"")+(typeof h==="undefined"?"null":h)}return k+"]";case"[object Object]":var k="{",j=0,h;for(var g in l){if(l.hasOwnProperty(g)){h=d(l[g]);typeof h!=="undefined"&&(k+=(j++?",":"")+'"'+g+'":'+h)}}return k+"}";default:return c}}}})();(function(i,e,h){var d=e(window),y=e(document),n={},w={},A={},f={},q={},v=i.blocks,b=i.INTERNAL,k=b.NAME_PATTERN,p=b.MOD_DELIM,j=b.ELEM_DELIM,z=b.buildModPostfix,t=b.buildClass;function r(D,B){var C=D[0];e.each(s(C),function(E,G){c(G,C,E,B);var F=w[G.uniqId];if(F){if(F.domElem.index(C)<0){F.domElem=F.domElem.add(D);e.extend(F._params,G)}}else{a(E,D,G)}})}function a(J,F,E,C,K){if(typeof E=="boolean"){K=C;C=E;E=h}var G=F[0];E=c(E||s(G)[J],G,J);var I=E.uniqId;if(w[I]){return w[I]._init()}n[I]=n[I]?n[I].add(F):F;var B=G.parentNode;if(!B||B.nodeType===11){e.unique(n[I])}var H=v[J]||u.decl(J,{},{live:true});if(!(H._liveInitable=!!H._processLive())||C||E.live===false){var D=new H(n[I],E,!!C);delete n[I];K&&K.apply(D,Array.prototype.slice.call(arguments,4));return D}}function c(G,D,C,B){(G||(G={})).uniqId||(G.uniqId=(G.id?C+"-id-"+G.id:e.identify())+(B||e.identify()));var F=e.identify(D),E=A[F]||(A[F]={});E[C]||(E[C]=G);return G}function x(C,B,E){var D=C.find(B);return E?D:D.add(C.filter(B))}function s(B){var C=e.identify(B);return A[C]||(A[C]=g(B))}function g(D){var C=D.onclick||D.ondblclick;if(!C&&D.tagName.toLowerCase()=="body"){var E=e(D),B=E.attr("onclick")||E.attr("ondblclick");B&&(C=Function(B))}return C?C():{}}function m(B){delete A[e.identify(B)]}function l(C,B){C.domElem.length===1?C.destruct(true):C.domElem=C.domElem.not(B)}function o(){return y[0][e.support.boxModel?"documentElement":"body"]}e.fn.bem=function(B,C){return a(B,this,C,true)};var u=i.DOM=i.decl("i-bem__dom",{__constructor:function(C,D,B){var E=this;E.domElem=C;E._eventNameCache={};E._elemCache={};w[E._uniqId=D.uniqId||e.identify(E)]=E;E._needSpecialUnbind=false;E.__base(null,D,B)},findBlocksInside:function(B,C){return this._findBlocks("find",B,C)},findBlockInside:function(B,C){return this._findBlocks("find",B,C,true)},findBlocksOutside:function(B,C){return this._findBlocks("parents",B,C)},findBlockOutside:function(B,C){return this._findBlocks("closest",B,C)[0]||null},findBlocksOn:function(B,C){return this._findBlocks("",B,C)},findBlockOn:function(B,C){return this._findBlocks("",B,C,true)},_findBlocks:function(L,B,D,E){if(!D){D=B;B=h}var G=B?(typeof B=="string"?this.findElem(B):B):this.domElem,F=typeof D=="string",K=F?D:(D.block||D.blockName),C="."+(F?t(K):t(K,D.modName,D.modVal))+(E?":first":""),H=G.filter(C);L&&(H=H.add(G[L](C)));if(E){return H[0]?a(K,H.eq(0),true):null}var J=[],I={};e.each(H,function(M,N){var O=a(K,e(N),true);if(!I[O._uniqId]){I[O._uniqId]=true;J.push(O)}});return J},bindToDomElem:function(C,D,B){var E=this;B?C.bind(E._buildEventName(D),function(F){(F.data||(F.data={})).domElem=e(this);return B.apply(E,arguments)}):e.each(D,function(G,F){E.bindToDomElem(C,G,F)});return E},bindToDoc:function(C,B){this._needSpecialUnbind=true;return this.bindToDomElem(y,C,B)},bindToWin:function(C,B){this._needSpecialUnbind=true;return this.bindToDomElem(d,C,B)},bindTo:function(D,C,B){if(!C||e.isFunction(C)){B=C;C=D;D=this.domElem}else{if(typeof D=="string"){D=this.elem(D)}}return this.bindToDomElem(D,C,B)},unbindFromDomElem:function(B,C){B.unbind(this._buildEventName(C));return this},unbindFromDoc:function(B){return this.unbindFromDomElem(y,B)},unbindFromWin:function(B){return this.unbindFromDomElem(d,B)},unbindFrom:function(C,B){if(!B){B=C;C=this.domElem}else{if(typeof C=="string"){C=this.elem(C)}}return this.unbindFromDomElem(C,B)},_buildEventName:function(B){var C=this;return B.indexOf(" ")>1?B.split(" ").map(function(D){return C._buildOneEventName(D)}).join(" "):C._buildOneEventName(B)},_buildOneEventName:function(D){var F=this,B=F._eventNameCache;if(D in B){return B[D]}var E="."+F._uniqId;if(D.indexOf(".")<0){return B[D]=D+E}var C=".bem_"+F.__self._name;return B[D]=D.split(".").map(function(H,G){return G==0?H+C:C+"_"+H}).join("")+E},trigger:function(C,B){this.__base(C=this.buildEvent(C),B).domElem&&this._ctxTrigger(C,B);return this},_ctxTrigger:function(C,B){var F=this,E=f[F.__self._buildCtxEventName(C.type)],D={};E&&F.domElem.each(function(){var H=this,G=E.counter;while(H&&G){var J=e.identify(H,true);if(J){if(D[J]){break}var I=E.ctxs[J];if(I){e.each(I,function(L,K){K.fn.call(K.ctx||F,C,B)});G--}D[J]=true}H=H.parentNode}})},setMod:function(C,D,B){if(C&&typeof B!="undefined"&&C.length>1){var E=this;C.each(function(){var F=e(this);F.__bemElemName=C.__bemElemName;E.setMod(F,D,B)});return E}return this.__base(C,D,B)},_extractModVal:function(F,C,E){var B=(C||this.domElem)[0],D;B&&(D=B.className.match(this.__self._buildModValRE(F,E||C)));return D?D[2]:""},_extractMods:function(B,F){var E={},C=!B.length,D=0;((F||this.domElem)[0].className.match(this.__self._buildModValRE("("+(C?k:B.join("|"))+")",F,"g"))||[]).forEach(function(G){var I=(G=G.trim()).lastIndexOf(p),H=G.substr(0,I-1).lastIndexOf(p);E[G.substr(H+1,I-H-1)]=G.substr(I+1);++D});D<B.length&&B.forEach(function(G){G in E||(E[G]="")});return E},_afterSetMod:function(G,J,I,C,B){var E=this.__self,F=E._buildModClassPrefix(G,B),H=E._buildModValRE(G,B),D=J==="";(C||this.domElem).each(function(){var K=this.className;K.indexOf(F)>-1?this.className=K.replace(H,(D?"":"$1"+F+J)+"$3"):D||e(this).addClass(F+J)});B&&this.dropElemCache(B,G,I).dropElemCache(B,G,J)},findElem:function(E,G,F,D){if(arguments.length%2){D=F;F=G;G=E;E=this.domElem}else{if(typeof E=="string"){E=this.findElem(E)}}var C=this.__self,B="."+G.split(" ").map(function(H){return t(C._name,H,F,D)}).join(",.");return x(E,B)},_elem:function(C,F,B){var E=C+z(F,B),D;if(!(D=this._elemCache[E])){D=this._elemCache[E]=this.findElem(C,F,B);D.__bemElemName=C}return D},elem:function(E,D,B){if(D&&typeof D!="string"){D.__bemElemName=E;return D}if(E.indexOf(" ")<0){return this._elem(E,D,B)}var C=e([]),F=this;E.split(" ").forEach(function(G){C=C.add(F._elem(G,D,B))});return C},dropElemCache:function(E,D,B){if(E){var F=this,C=z(D,B);E.indexOf(" ")<0?delete F._elemCache[E+C]:E.split(" ").forEach(function(G){delete F._elemCache[G+C]})}else{this._elemCache={}}return this},elemParams:function(B){var C;if(typeof B=="string"){C=B;B=this.elem(B)}else{C=this.__self._extractElemNameFrom(B)}return g(B[0])[t(this.__self.getName(),C)]||{}},containsDomElem:function(C){var B=false;this.domElem.each(function(){return !(B=C.parents().andSelf().index(this)>-1)});return B},buildSelector:function(C,D,B){return this.__self.buildSelector(C,D,B)},destruct:function(C){var D=this,B=D.__self;D._isDestructing=true;D._needSpecialUnbind&&B.doc.add(B.win).unbind("."+D._uniqId);D.dropElemCache().domElem.each(function(E,F){var G=s(F);e.each(G,function(H,I){var J=w[I.uniqId];if(J){if(!J._isDestructing){l(J,F);delete G[H]}}else{delete n[I.uniqId]}});e.isEmptyObject(G)&&m(F)});C||D.domElem.remove();delete w[D.un()._uniqId];delete D.domElem;delete D._elemCache;D.__base()}},{doc:y,win:d,_processLive:function(C){var E=this,D=E._liveInitable;if("live" in E){var B=typeof D=="undefined";if(B^C){if(e.isFunction(E.live)){D=E.live()!==false;E.live=function(){}}else{D=E.live}}}return D},init:function(C,E,D){if(!C||e.isFunction(C)){D=E;E=C;C=y}var B=e.identify();x(C,".i-bem").each(function(){r(e(this),B)});E&&this.afterCurrentEvent(function(){E.call(D||this,C)});this._runAfterCurrentEventFns();return C},destruct:function(C,B,D){if(typeof C!="boolean"){D=B;B=C;C=h}x(B,".i-bem",D).each(function(E,F){var G=s(this);e.each(G,function(H,I){if(I.uniqId){var J=w[I.uniqId];if(J){l(J,F);delete G[H]}else{delete n[I.uniqId]}}});e.isEmptyObject(G)&&m(this)});C||(D?B.empty():B.remove())},update:function(B,C,E,D){this.destruct(B,true);this.init(B.html(C),E,D)},append:function(B,C){this.init(e(C).appendTo(B))},prepend:function(B,C){this.init(e(C).prependTo(B))},before:function(B,C){this.init(e(C).insertBefore(B))},after:function(B,C){this.init(e(C).insertAfter(B))},_buildCtxEventName:function(B){return this._name+":"+B},_liveClassBind:function(C,D,H,B){var G=this;if(D.indexOf(" ")>-1){D.split(" ").forEach(function(I){G._liveClassBind(C,I,H,B)})}else{var F=q[D],E=e.identify(H);if(!F){F=q[D]={};y.bind(D,G.changeThis(G._liveClassTrigger,G))}F=F[C]||(F[C]={uniqIds:{},fns:[]});if(!(E in F.uniqIds)){F.fns.push({uniqId:E,fn:G._buildLiveEventFn(H,B)});F.uniqIds[E]=F.fns.length-1}}return this},_liveClassUnbind:function(D,E,H){var G=q[E];if(G){if(H){if(G=G[D]){var F=e.identify(H);if(F in G.uniqIds){var C=G.uniqIds[F],B=G.fns.length-1;G.fns.splice(C,1);while(C<B){G.uniqIds[G.fns[C++].uniqId]=C-1}delete G.uniqIds[F]}}}else{delete G[D]}}return this},_liveClassTrigger:function(H){var G=q[H.type];if(G){var D=H.target,B=[];for(var I in G){G.hasOwnProperty(I)&&B.push(I)}do{var C=" "+D.className+" ",F=0;while(I=B[F++]){if(C.indexOf(" "+I+" ")>-1){var E=0,K=G[I].fns,J;while(J=K[E++]){J.fn.call(e(D),H)}if(H.isPropagationStopped()){return}B.splice(--F,1)}}}while(B.length&&(D=D.parentNode))}},_buildLiveEventFn:function(D,B){var C=this;return function(F){var E=[C._name,((F.data||(F.data={})).domElem=e(this)).closest(C.buildSelector()),true],G=a.apply(null,B?E.concat([D,F]):E);G&&(B||(D&&D.apply(G,arguments)))}},liveInitOnEvent:function(C,B,D){return this.liveBindTo(C,B,D,true)},liveBindTo:function(F,C,E,B){if(!C||e.isFunction(C)){E=C;C=F;F=h}if(!F||typeof F=="string"){F={elem:F}}F.elemName&&(F.elem=F.elemName);var D=this;if(F.elem&&F.elem.indexOf(" ")>1){F.elem.split(" ").forEach(function(G){D._liveClassBind(t(D._name,G,F.modName,F.modVal),C,E,B)});return D}return D._liveClassBind(t(D._name,F.elem,F.modName,F.modVal),C,E,B)},liveUnbindFrom:function(C,B,E){var D=this;if(C.indexOf(" ")>1){C.split(" ").forEach(function(F){D._liveClassUnbind(t(D._name,F),B,E)});return D}return D._liveClassUnbind(t(D._name,C),B,E)},_liveInitOnBlockEvent:function(D,C,F,E){var B=this._name;v[C].on(D,function(H){var G=arguments,I=H.block[E](B);F&&I.forEach(function(J){F.apply(J,G)})});return this},liveInitOnBlockEvent:function(C,B,D){return this._liveInitOnBlockEvent(C,B,D,"findBlocksOn")},liveInitOnBlockInsideEvent:function(C,B,D){return this._liveInitOnBlockEvent(C,B,D,"findBlocksOutside")},liveInitOnBlockInit:function(B,C){return this.liveInitOnBlockEvent("init",B,C)},liveInitOnBlockInsideInit:function(B,C){return this.liveInitOnBlockInsideEvent("init",B,C)},on:function(B,F,E,D,C){return B.jquery?this._liveCtxBind(B,F,E,D,C):this.__base(B,F,E,D)},un:function(B,E,D,C){return B.jquery?this._liveCtxUnbind(B,E,D,C):this.__base(B,E,D)},liveCtxBind:function(B,F,E,D,C){return this._liveCtxBind(B,F,E,D,C)},_liveCtxBind:function(B,G,F,E,D){var I=this;if(typeof G=="string"){if(e.isFunction(F)){D=E;E=F;F=h}if(G.indexOf(" ")>-1){G.split(" ").forEach(function(J){I._liveCtxBind(B,J,F,E,D)})}else{var C=I._buildCtxEventName(G),H=f[C]||(f[C]={counter:0,ctxs:{}});B.each(function(){var K=e.identify(this),J=H.ctxs[K];if(!J){J=H.ctxs[K]={};++H.counter}J[e.identify(E)+(D?e.identify(D):"")]={fn:E,data:F,ctx:D}})}}else{e.each(G,function(K,J){I._liveCtxBind(B,K,J,F)})}return I},liveCtxUnbind:function(B,E,D,C){return this._liveCtxUnbind(B,E,D,C)},_liveCtxUnbind:function(B,E,D,C){var G=this,F=f[E=G._buildCtxEventName(E)];if(F){B.each(function(){var I=e.identify(this,true),H;if(I&&(H=F.ctxs[I])){D&&delete H[e.identify(D)+(C?e.identify(C):"")];if(!D||e.isEmptyObject(H)){F.counter--;delete F.ctxs[I]}}});F.counter||delete f[E]}return G},_extractElemNameFrom:function(B){if(B.__bemElemName){return B.__bemElemName}var C=B[0].className.match(this._buildElemNameRE());return C?C[1]:h},extractParams:g,_buildModClassPrefix:function(C,B){return t(this._name)+(B?j+(typeof B==="string"?B:this._extractElemNameFrom(B)):"")+p+C+p},_buildModValRE:function(C,B,D){return new RegExp("(\\s?)"+this._buildModClassPrefix(C,B)+"("+k+")(\\s|$)",D)},_buildElemNameRE:function(){return new RegExp(this._name+j+"("+k+")(?:\\s|$)")},buildSelector:function(C,D,B){return"."+t(this._name,C,D,B)},getBlockByUniqId:function(B){return w[B]},getWindowSize:function(){return{width:d.width(),height:d.height()}}})})(BEM,jQuery);(function(){String.prototype.trim||(String.prototype.trim=function(){var c=this.replace(/^\s\s*/,""),a=/\s/,b=c.length;while(a.test(c.charAt(--b))){}return c.slice(0,b+1)})})();(function(a){if(!a){a=window.Lego={}}a.isSessionValid=function(){return !!a.getCookie("yandex_login")}})(window.Lego);BEM.DOM.decl("i-global",{onSetMod:{js:function(){this.del(this.__self._params=$.extend({},this.params),"uniqId","name");var a=this.__self._params;a["passport-msg"]||(a["passport-msg"]=a.id);if(a["show-counters"]===undefined){a["show-counters"]=Math.round(Math.random()*100)<=a["show-counters-percent"]}a.locale=a.lang;$(function(){a.oframebust&&Lego.oframebust(a.oframebust)})}},getDefaultParams:function(){return{id:"",login:Lego.isSessionValid()?$.cookie("yandex_login")||"":"",yandexuid:$.cookie("yandexuid"),lang:"ru",retpath:window.location.toString(),"passport-host":"https://passport.yandex.ru","pass-host":"//pass.yandex.ru","social-host":"//social.yandex.ru","lego-path":"/lego","show-counters-percent":100}}},{param:function(a){return(this._params||{})[a]}});(function(b){if(!b){b=window.Lego={}}!b.params&&(b.params={});function a(c){return c.replace(/^(?:https?:)?\/\//,"")}b.c=function(d,c,j){var i=a((j&&j.host)||BEM.blocks["i-global"].param("click-host")||"clck.yandex.ru"),e=function(l,n,m,k){n=n.replace("'","%27");return n.indexOf("/dtype=")>-1?n:location.protocol+"//"+i+"/"+m+"/dtype="+l+"/rnd="+((new Date()).getTime()+Math.round(Math.random()*100))+(k?"/*"+(n.match(/^http/)?n:location.protocol+"//"+location.host+(n.match("^/")?n:"/"+n)):"/*data="+encodeURIComponent("url="+encodeURIComponent((n.match(/^http/)?n:location.protocol+"//"+location.host+(n.match("^/")?n:"/"+n)))))},g=function(){var k=document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0];var h=document.createElement("script");h.setAttribute("src",e(d,location.href,"jclck"));k.insertBefore(h,k.firstChild)};if(c){if(c.className.match(/b-link_pseudo_yes/)||(c.href&&c.href.match(/^mailto:/))||(j&&j.noRedirect===true)){g()}else{if(c.href){var f=c.href;c.href=e(d,f,"redir");setTimeout(function(){c.href=f},500)}else{if(c.form){if(c.type.match(/submit|button|image/)){var f=c.form.action;c.form.action=e(d,f,"redir",true);setTimeout(function(){c.form.action=f},500)}else{g()}}else{if(c.action){c.action=e(d,c.action,"redir",true)}else{throw"counter.js: not link and not form!"}}}}}else{g()}}})(window.Lego);(function(a){if(!a){a=window.Lego={}}a.cp=function(f,c,e,b,d){a.c("stred/pid="+f+"/cid="+c+(e?"/path="+e:""),b,d)}})(window.Lego);(function(a){if(!a){a=window.Lego={}}a.ch=function(c,b){BEM.blocks["i-global"].param("show-counters")&&a.cp(0,2219,c,b)}})(window.Lego);(function(a){if(!a){a=window.Lego={}}a.getCookie=function(h){var g=document.cookie;if(g.length<1){return false}var d=g.indexOf(h+"=");if(d==-1){return false}d+=(h.length+1);var f=g.indexOf(";",d);return decodeURIComponent((f==-1)?g.substring(d):g.substring(d,f))}})(window.Lego);(function(b,a){if(!a){a=window.Lego={}}a.init||(a.init=function(c){(c=a.params=b.extend({id:"",login:a.isSessionValid()?a.getCookie("yandex_login")||"":"",yandexuid:a.getCookie("yandexuid"),locale:"ru",retpath:window.location.toString(),"passport-host":"//passport.yandex.ru","pass-host":"//pass.yandex.ru","passport-msg":c.id,"social-host":"//social.yandex.ru","lego-path":"/lego","show-counters-percent":100},c,a.params))["show-counters"]=Math.round(Math.random()*100)<=c["show-counters-percent"];BEM.blocks["i-global"]._params||b.extend(BEM.blocks["i-global"]._params={},c);b(function(){c.oframebust&&a.oframebust(c.oframebust)});return c});a.block||(a.block={});a.blockInit||(a.blockInit=function(c,d){c=c||document;d=d||".g-js";b(c).find(d).each(function(){var h=b(this),g=this.onclick?this.onclick():{},e=g.name||"",f=a.block[e];if(f&&!h.data(e)){f.call(h,g);h.data(e,true).addClass(e+"_js_inited")}})});a.blockInitBinded||(a.blockInitBinded=!!b(document).ready(function(){a.blockInit()}))})(jQuery,window.Lego);(function(a){if(!a){a=window.Lego={}}a.messages=a.messages||{};a.message=function(c,b){return a.params.locale=="ru"?b:(a.messages[c]||b)}})(window.Lego);$(function(){BEM.DOM.init()});if(!("onhashchange" in window)||$.browser.msie){var prevHash=window.location.hash;window.setInterval(function(){if(window.location.hash!=prevHash){storedHash=window.location.hash;$(window).trigger("hashchange")}},100)}BEM.DOM.decl("b-page",{HASH:["index","faq","interface-development","interface-design","javascript"],onSetMod:{js:function(){var a=this;a._bMenu=a.findBlockInside("b-menu");_menuItems=a._bMenu.elem("item");a._menuItems={};_menuItems.map(function(d){var e=_menuItems.eq(d);a._menuItems[e.data("hash")]=e});texts=a.findBlocksInside("b-static-text");a._texts={};for(var b=0;b<texts.length;b++){var c=texts[b];a._texts[c.domElem.data("hash")]=c}this.bindToWin("hashchange",a._hashChange);a._hashChange()}},_hashChange:function(){var a=this;if(a._current){a._flushOld()}a._pageHash=window.location.hash.substring(1);if(a.HASH.indexOf(a._pageHash)==-1){a._pageHash="index"}a._current=a._pageHash;a._showPage(a._pageHash)},_showPage:function(a){this._bMenu.setMod(this._menuItems[a],"state","current");this._texts[a].setMod("visible","yes")},_flushOld:function(){this._bMenu.delMod(this._menuItems[this._current],"state");this._texts[this._current].delMod("visible")}});(function(a){var b=a.event.special.leftclick={setup:function(){a(this).bind("click",b.handler)},teardown:function(){a(this).unbind("click",b.handler)},handler:function(c){if(!c.button){c.type="leftclick";a.event.handle.apply(this,arguments);c.type="click"}}}})(jQuery);BEM.HTML.decl("b-link",{onBlock:function(a){a.tag("a").attr("href",a.param("url"));var b=["title","target"],c;while(c=b.pop()){a.param(c)&&(a.attr(c,a.param(c)))}}});BEM.HTML.decl("b-icon",{onBlock:function(c){var b={src:"//yandex.st/lego/_/La6qi18Z8LwgnZdsAr1qy1GwCwo.gif",alt:""},f=c.params(),d=["alt","width","height"],e;f.url&&(b.src=f.url);while(e=d.shift()){f[e]&&(b[e]=f[e])}c.tag("img").attrs(b)}});var i18n=i18n||{};(function(e,d){var a={},j=[],k="_",g="__",f="ru";function l(m){typeof m==="string"&&(m={block:m});return m.block+(m.elem?(g+m.elem):"")+(m.modName?k+m.modName+k+m.modVal:"")}function h(n){var m={};n.split(g).forEach(function(q,o){var p=[o?"elem":"block","mod","val"];q.split(k).forEach(function(s,r){m[p[r]]=s})});return m}function c(n){if(!n){return false}var m=j.length;return !(m&&j[m-1]===n)&&j.push(n)}function b(n){var m=j.length;return m&&j[m-1]!==n&&j.pop()}function i(){this._lang="";this._prj="lego";this._keyset="";this._key=""}i.prototype={lang:function(m){this._lang=m;return this},project:function(m){this._prj=m;return this},keyset:function(m){c(this._keyset);this._keyset=l(m);return this},key:function(m){this._key=m;return this},decl:function(p){var n=h(this._keyset),q=n.block==="i-tanker"?"tanker":this._prj,s=n.elem||this._keyset,r=this._key;q=i18n[q]||(i18n[q]={});s=q[s]||(q[s]={});s[r]=typeof p==="function"?p:(function(t){return(p)});var m=a[this._lang]||(a[this._lang]={}),o=m[this._keyset]||(m[this._keyset]={});o[r]=p},val:function(p,m){var n=a[this._lang]&&a[this._lang][this._keyset];if(!n){console&&console.log&&console.log("[Error] keyset: "+this._keyset+" key: "+this._key+" (lang: "+this._lang+")");return""}n=n[this._key];if(!n){return""}try{return typeof n==="string"?n:m?n.call(m,p):n.call(this,p)}catch(o){throw"[Error] keyset: "+this._keyset+" key: "+this._key+" (lang: "+this._lang+")"}},_c:function(){return a}};e.I18N=(function(n){var m=function(p,o,q){return m.keyset(p).key(o,q)};["project","keyset"].forEach(function(o){m[o]=function(p){this._i18n[o](p);return this}});m.key=function(p,s){var q=this._i18n,r,o;q.lang(this._currentLang).key(p);o=q.val.call(q,s,m);r=b(q._keyset);r&&q.keyset(r);return o};m.decl=function(o,s,q){var r=this._i18n,p;q||(q={});q.lang&&r.lang(q.lang);r.keyset(o);for(p in s){r.key(p).decl(s[p])}return this};m.lang=function(o){typeof o!==d&&(this._currentLang=o);return this._currentLang};m._i18n=n;m._currentLang=f;return m}(new i()));BEM=this.BEM=e})(typeof BEM==="undefined"?{}:BEM);BEM.I18N.lang("ru")};
+(function(){this._ycssjs||(this._ycssjs=function(k, f){return !(k in _ycssjs||_ycssjs[k]++)})})();
+if(_ycssjs('vB2eFkb0LNlDHsrRTm0QVxFwlQQ')){
+/* ../../lego/bem-bl/blocks-common/i-jquery/__inherit/i-jquery__inherit.js: begin */ /**/
+/**
+ * Inheritance plugin
+ *
+ * Copyright (c) 2010 Filatov Dmitry (dfilatov@yandex-team.ru)
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * @version 1.3.3
+ */
+
+(function($) {
+
+var hasIntrospection = (function(){_}).toString().indexOf('_') > -1,
+    needCheckProps = $.browser.msie, // fucking ie hasn't toString, valueOf in for
+    specProps = needCheckProps? ['toString', 'valueOf'] : null,
+    emptyBase = function() {};
+
+function override(base, result, add) {
+
+    var hasSpecProps = false;
+    if(needCheckProps) {
+        var addList = [];
+        $.each(specProps, function() {
+            add.hasOwnProperty(this) && (hasSpecProps = true) && addList.push({
+                name : this,
+                val  : add[this]
+            });
+        });
+        if(hasSpecProps) {
+            $.each(add, function(name) {
+                addList.push({
+                    name : name,
+                    val  : this
+                });
+            });
+            add = addList;
+        }
+    }
+
+    $.each(add, function(name, prop) {
+        if(hasSpecProps) {
+            name = prop.name;
+            prop = prop.val;
+        }
+        if($.isFunction(prop) &&
+           (!hasIntrospection || prop.toString().indexOf('.__base') > -1)) {
+
+            var baseMethod = base[name] || function() {};
+            result[name] = function() {
+                var baseSaved = this.__base;
+                this.__base = baseMethod;
+                var result = prop.apply(this, arguments);
+                this.__base = baseSaved;
+                return result;
+            };
+
+        }
+        else {
+            result[name] = prop;
+        }
+
+    });
+
+}
+
+$.inherit = function() {
+
+    var args = arguments,
+        hasBase = $.isFunction(args[0]),
+        base = hasBase? args[0] : emptyBase,
+        props = args[hasBase? 1 : 0] || {},
+        staticProps = args[hasBase? 2 : 1],
+        result = props.__constructor || (hasBase && base.prototype.__constructor)?
+            function() {
+                return this.__constructor.apply(this, arguments);
+            } : function() {};
+
+    if(!hasBase) {
+        result.prototype = props;
+        result.prototype.__self = result.prototype.constructor = result;
+        return $.extend(result, staticProps);
+    }
+
+    $.extend(result, base);
+
+    var inheritance = function() {},
+        basePtp = inheritance.prototype = base.prototype,
+        resultPtp = result.prototype = new inheritance();
+
+    resultPtp.__self = resultPtp.constructor = result;
+
+    override(basePtp, resultPtp, props);
+    staticProps && override(base, result, staticProps);
+
+    return result;
+
+};
+
+$.inheritSelf = function(base, props, staticProps) {
+
+    var basePtp = base.prototype;
+
+    override(basePtp, basePtp, props);
+    staticProps && override(base, base, staticProps);
+
+    return base;
+
+};
+
+})(jQuery);;
+/* ../../lego/bem-bl/blocks-common/i-jquery/__inherit/i-jquery__inherit.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-jquery/__identify/i-jquery__identify.js: begin */ /**/
+/**
+ * Identify plugin
+ *
+ * @version 1.0.0
+ */
+
+(function($) {
+
+var counter = 0,
+    expando = '__' + (+new Date),
+    get = function() {
+        return 'uniq' + ++counter;
+    };
+
+/**
+ * Makes unique ID
+ * @param {Object} [obj] Object that needs to be identified
+ * @param {Boolean} [onlyGet=false] Return a unique value only if it had already been assigned before
+ * @returns {String} ID
+ */
+$.identify = function(obj, onlyGet) {
+
+    if(!obj) return get();
+
+    var key = 'uniqueID' in obj? 'uniqueID' : expando; // Use when possible. native uniqueID for elements in IE
+
+    return onlyGet || key in obj?
+        obj[key] :
+        obj[key] = get();
+
+};
+
+})(jQuery);;
+/* ../../lego/bem-bl/blocks-common/i-jquery/__identify/i-jquery__identify.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-jquery/__is-empty-object/i-jquery__is-empty-object.js: begin */ /**/
+(function($) {
+
+$.isEmptyObject || ($.isEmptyObject = function(obj) {
+        for(var i in obj) return false;
+        return true;
+    });
+
+})(jQuery);
+;
+/* ../../lego/bem-bl/blocks-common/i-jquery/__is-empty-object/i-jquery__is-empty-object.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-jquery/__debounce/i-jquery__debounce.js: begin */ /**/
+/**
+ * Debounce and throttle function's decorator plugin 1.0.6
+ *
+ * Copyright (c) 2009 Filatov Dmitry (alpha@zforms.ru)
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ */
+
+(function($) {
+
+$.extend({
+
+    debounce : function(fn, timeout, invokeAsap, ctx) {
+
+        if(arguments.length == 3 && typeof invokeAsap != 'boolean') {
+            ctx = invokeAsap;
+            invokeAsap = false;
+        }
+
+        var timer;
+
+        return function() {
+
+            var args = arguments;
+            ctx = ctx || this;
+
+            invokeAsap && !timer && fn.apply(ctx, args);
+
+            clearTimeout(timer);
+
+            timer = setTimeout(function() {
+                invokeAsap || fn.apply(ctx, args);
+                timer = null;
+            }, timeout);
+
+        };
+
+    },
+
+    throttle : function(fn, timeout, ctx) {
+
+        var timer, args, needInvoke;
+
+        return function() {
+
+            args = arguments;
+            needInvoke = true;
+            ctx = ctx || this;
+
+            timer || (function() {
+                if(needInvoke) {
+                    fn.apply(ctx, args);
+                    needInvoke = false;
+                    timer = setTimeout(arguments.callee, timeout);
+                }
+                else {
+                    timer = null;
+                }
+            })();
+
+        };
+
+    }
+
+});
+
+})(jQuery);;
+/* ../../lego/bem-bl/blocks-common/i-jquery/__debounce/i-jquery__debounce.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-jquery/__observable/i-jquery__observable.js: begin */ /**/
+/**
+ * Observable plugin
+ *
+ * Copyright (c) 2010 Filatov Dmitry (alpha@zforms.ru)
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * @version 1.0.0
+ * @requires $.identify
+ * @requires $.inherit
+ */
+
+(function($) {
+
+var storageExpando = '__' + +new Date + 'storage',
+    getFnId = function(fn, ctx) {
+        return $.identify(fn) + (ctx? $.identify(ctx) : '');
+    },
+    Observable = /** @lends $.observable.prototype */{
+
+        /**
+         * Builds full event name
+         * @protected
+         * @param {String} e Event type
+         * @returns {String}
+         */
+        buildEventName : function(e) {
+
+            return e;
+
+        },
+
+        /**
+         * Adding event handler
+         * @param {String} e Event type
+         * @param {Object} [data] Additional data that the handler gets as e.data
+         * @param {Function} fn Handler
+         * @param {Object} [ctx] Handler context
+         * @returns {$.observable}
+         */
+        on : function(e, data, fn, ctx, _special) {
+
+            if(typeof e == 'string') {
+                if($.isFunction(data)) {
+                    ctx = fn;
+                    fn = data;
+                    data = undefined;
+                }
+
+                var id = getFnId(fn, ctx),
+                    storage = this[storageExpando] || (this[storageExpando] = {}),
+                    eList = e.split(' '),
+                    i = 0,
+                    eStorage;
+
+                while(e = eList[i++]) {
+                    e = this.buildEventName(e);
+                    eStorage = storage[e] || (storage[e] = { ids : {}, list : {} });
+
+                    if(!(id in eStorage.ids)) {
+                        var list = eStorage.list,
+                            item = { fn : fn, data : data, ctx : ctx, special : _special };
+                        if(list.last) {
+                            list.last.next = item;
+                            item.prev = list.last;
+                        } else {
+                            list.first = item;
+                        }
+
+                        eStorage.ids[id] = list.last = item;
+                    }
+                }
+            } else {
+                var _this = this;
+                $.each(e, function(e, fn) {
+                    _this.on(e, fn, data, _special);
+                });
+            }
+
+            return this;
+
+        },
+
+        onFirst : function(e, data, fn, ctx) {
+
+            return this.on(e, data, fn, ctx, { one : true });
+
+        },
+
+        /**
+         * Removing event handler(s)
+         * @param {String} [e] Event type
+         * @param {Function} [fn] Handler
+         * @param {Object} [ctx] Handler context
+         * @returns {$.observable}
+         */
+        un : function(e, fn, ctx) {
+
+            if(typeof e == 'string' || typeof e == 'undefined') {
+                var storage = this[storageExpando];
+                if(storage) {
+                    if(e) { // if event type was passed
+                        var eList = e.split(' '),
+                            i = 0,
+                            eStorage;
+                        while(e = eList[i++]) {
+                            e = this.buildEventName(e);
+                            if(eStorage = storage[e]) {
+                                if(fn) {  // if specific handler was passed
+                                    var id = getFnId(fn, ctx),
+                                        ids = eStorage.ids;
+                                    if(id in ids) {
+                                        var list = eStorage.list,
+                                            item = ids[id],
+                                            prev = item.prev,
+                                            next = item.next;
+
+                                        if(prev) {
+                                            prev.next = next;
+                                        }
+                                        else if(item === list.first) {
+                                            list.first = next;
+                                        }
+
+                                        if(next) {
+                                            next.prev = prev;
+                                        }
+                                        else if(item === list.last) {
+                                            list.last = prev;
+                                        }
+
+                                        delete ids[id];
+                                    }
+                                } else {
+                                    delete this[storageExpando][e];
+                                }
+                            }
+                        }
+                    } else {
+                        delete this[storageExpando];
+                    }
+                }
+            } else {
+                var _this = this;
+                $.each(e, function(e, fn) {
+                    _this.un(e, fn, ctx);
+                });
+            }
+
+            return this;
+
+        },
+
+        /**
+         * Fires event handlers
+         * @param {String|$.Event} e Event
+         * @param {Object} [data] Additional data
+         * @returns {$.observable}
+         */
+        trigger : function(e, data) {
+
+            var _this = this,
+                storage = _this[storageExpando],
+                rawType;
+
+            typeof e === 'string'?
+                e = $.Event(_this.buildEventName(rawType = e)) :
+                e.type = _this.buildEventName(rawType = e.type);
+
+            e.target || (e.target = _this);
+
+            if(storage && (storage = storage[e.type])) {
+                var item = storage.list.first,
+                    ret;
+                while(item) {
+                    e.data = item.data;
+                    ret = item.fn.call(item.ctx || _this, e, data);
+                    if(typeof ret !== 'undefined') {
+                        e.result = ret;
+                        if(ret === false) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    }
+
+                    item.special && item.special.one &&
+                        _this.un(rawType, item.fn, item.ctx);
+                    item = item.next;
+                }
+            }
+
+            return this;
+
+        }
+
+    };
+
+$.observable = $.inherit(Observable, Observable);
+
+})(jQuery);;
+/* ../../lego/bem-bl/blocks-common/i-jquery/__observable/i-jquery__observable.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-bem/i-bem.js: begin */ /**/
+/** @requires jquery.inherit */
+/** @requires jquery.isEmptyObject */
+/** @requires jquery.identify */
+/** @requires jquery.observable */
+
+(function($, undefined) {
+
+/**
+ * Storage for deferred functions
+ * @private
+ * @type Array
+ */
+var afterCurrentEventFns = [],
+
+/**
+ * Storage for block declarations (hash by block name)
+ * @private
+ * @type Object
+ */
+    blocks = {},
+
+/**
+ * Communication channels
+ * @static
+ * @private
+ * @type Object
+ */
+    channels = {};
+
+/**
+ * Builds the name of the handler method for setting a modifier
+ * @static
+ * @private
+ * @param {String} elemName Element name
+ * @param {String} modName Modifier name
+ * @param {String} modVal Modifier value
+ * @returns {String}
+ */
+function buildModFnName(elemName, modName, modVal) {
+
+    return (elemName? '__elem_' + elemName : '') +
+           '__mod' +
+           (modName? '_' + modName : '') +
+           (modVal? '_' + modVal : '');
+
+}
+
+/**
+ * Transforms a hash of modifier handlers to methods
+ * @static
+ * @private
+ * @param {Object} modFns
+ * @param {Object} props
+ * @param {String} [elemName]
+ */
+function modFnsToProps(modFns, props, elemName) {
+
+    $.isFunction(modFns)?
+        (props[buildModFnName(elemName, '*', '*')] = modFns) :
+        $.each(modFns, function(modName, modFn) {
+            $.isFunction(modFn)?
+                (props[buildModFnName(elemName, modName, '*')] = modFn) :
+                $.each(modFn, function(modVal, modFn) {
+                    props[buildModFnName(elemName, modName, modVal)] = modFn;
+                });
+        });
+
+}
+
+function buildCheckMod(modName, modVal) {
+
+    return modVal?
+        Array.isArray(modVal)?
+            function(block) {
+                var i = 0, len = modVal.length;
+                while(i < len)
+                    if(block.hasMod(modName, modVal[i++]))
+                        return true;
+                return false;
+            } :
+            function(block) {
+                return block.hasMod(modName, modVal);
+            } :
+        function(block) {
+            return block.hasMod(modName);
+        };
+
+}
+
+/** @namespace */
+this.BEM = $.inherit($.observable, /** @lends BEM.prototype */ {
+
+    /**
+     * @class Base block for creating BEM blocks
+     * @constructs
+     * @private
+     * @param {Object} mods Block modifiers
+     * @param {Object} params Block parameters
+     * @param {Boolean} [initImmediately=true]
+     */
+    __constructor : function(mods, params, initImmediately) {
+
+        var _this = this;
+
+        /**
+         * Cache of block modifiers
+         * @private
+         * @type Object
+         */
+        _this._modCache = mods || {};
+
+        /**
+         * Current modifiers in the stack
+         * @private
+         * @type Object
+         */
+        _this._processingMods = {};
+
+        /**
+         * The block's parameters, taking into account the defaults
+         * @protected
+         * @type Object
+         */
+        _this._params = params; // это нужно для правильной сборки параметров у блока из нескольких нод
+        _this.params = null;
+
+        initImmediately !== false?
+            _this._init() :
+            _this.afterCurrentEvent(function() {
+                _this._init();
+            });
+
+    },
+
+    /**
+     * Initializes the block
+     * @private
+     */
+    _init : function() {
+
+        if(!this._initing && !this.hasMod('js', 'inited')) {
+            this._initing = true;
+
+            this.params = $.extend(this.getDefaultParams(), this._params);
+            delete this._params;
+
+            this.setMod('js', 'inited');
+            delete this._initing;
+            this.trigger('init');
+        }
+
+        return this;
+
+    },
+
+    /**
+     * Changes the context of the function being passed
+     * @protected
+     * @param {Function} fn
+     * @param {Object} [ctx=this] Context
+     * @returns {Function} Function with a modified context
+     */
+    changeThis : function(fn, ctx) {
+
+        return fn.bind(ctx || this);
+
+    },
+
+    /**
+     * Executes the function in the context of the block, after the "current event"
+     * @protected
+     * @param {Function} fn
+     * @param {Object} [ctx] Context
+     */
+    afterCurrentEvent : function(fn, ctx) {
+
+        this.__self.afterCurrentEvent(this.changeThis(fn, ctx));
+
+    },
+
+    /**
+     * Executes the block's event handlers and live event handlers
+     * @protected
+     * @param {String} e Event name
+     * @param {Object} [data] Additional information
+     * @returns {BEM}
+     */
+    trigger : function(e, data) {
+
+        this
+            .__base(e = this.buildEvent(e), data)
+            .__self.trigger(e, data);
+
+        return this;
+
+    },
+
+    buildEvent : function(e) {
+
+        typeof e == 'string' && (e = $.Event(e));
+        e.block = this;
+
+        return e;
+
+    },
+
+    /**
+     * Checks whether a block or nested element has a modifier
+     * @protected
+     * @param {Object} [elem] Nested element
+     * @param {String} modName Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {Boolean}
+     */
+    hasMod : function(elem, modName, modVal) {
+
+        var len = arguments.length,
+            invert = false;
+
+        if(len == 1) {
+            modVal = '';
+            modName = elem;
+            elem = undefined;
+            invert = true;
+        }
+        else if(len == 2) {
+            if(typeof elem == 'string') {
+                modVal = modName;
+                modName = elem;
+                elem = undefined;
+            }
+            else {
+                modVal = '';
+                invert = true;
+            }
+        }
+
+        var res = this.getMod(elem, modName) === modVal;
+        return invert? !res : res;
+
+    },
+
+    /**
+     * Returns the value of the modifier of the block/nested element
+     * @protected
+     * @param {Object} [elem] Nested element
+     * @param {String} modName Modifier name
+     * @returns {String} Modifier value
+     */
+    getMod : function(elem, modName) {
+
+        var type = typeof elem;
+        if(type === 'string' || type === 'undefined') { // elem either omitted or undefined
+            modName = elem || modName;
+            var modCache = this._modCache;
+            return modName in modCache?
+                modCache[modName] :
+                modCache[modName] = this._extractModVal(modName);
+        }
+
+        return this._getElemMod(modName, elem);
+
+    },
+
+    /**
+     * Returns the value of the modifier of the nested element
+     * @private
+     * @param {String} modName Modifier name
+     * @param {Object} elem Nested element
+     * @param {Object} [elem] Nested element name
+     * @returns {String} Modifier value
+     */
+    _getElemMod : function(modName, elem, elemName) {
+
+        return this._extractModVal(modName, elem, elemName);
+
+    },
+
+    /**
+     * Returns values of modifiers of the block/nested element
+     * @protected
+     * @param {Object} [elem] Nested element
+     * @param {String} [modName1, ..., modNameN] Modifier names
+     * @returns {Object} Hash of modifier values
+     */
+    getMods : function(elem) {
+
+        var hasElem = elem && typeof elem != 'string',
+            _this = this,
+            modNames = [].slice.call(arguments, hasElem? 1 : 0),
+            res = _this._extractMods(modNames, hasElem? elem : undefined);
+
+        if(!hasElem) { // caching
+            modNames.length?
+                modNames.forEach(function(name) {
+                    _this._modCache[name] = res[name];
+                }):
+                _this._modCache = res;
+        }
+
+        return res;
+
+    },
+
+    /**
+     * Sets the modifier for a block/nested element
+     * @protected
+     * @param {Object} [elem] Nested element
+     * @param {String} modName Modifier name
+     * @param {String} modVal Modifier value
+     * @returns {BEM}
+     */
+    setMod : function(elem, modName, modVal) {
+
+        if(typeof modVal == 'undefined') {
+            modVal = modName;
+            modName = elem;
+            elem = undefined;
+        }
+
+        var _this = this;
+
+        if(!elem || elem[0]) {
+
+            var modId = (elem && elem[0]? $.identify(elem[0]) : '') + '_' + modName;
+
+            if(this._processingMods[modId]) return _this;
+
+            var elemName,
+                curModVal = elem?
+                    _this._getElemMod(modName, elem, elemName = _this.__self._extractElemNameFrom(elem)) :
+                    _this.getMod(modName);
+
+            if(curModVal === modVal) return _this;
+
+            this._processingMods[modId] = true;
+
+            var needSetMod = true,
+                modFnParams = [modName, modVal, curModVal];
+
+            elem && modFnParams.unshift(elem);
+
+            [['*', '*'], [modName, '*'], [modName, modVal]].forEach(function(mod) {
+                needSetMod = _this._callModFn(elemName, mod[0], mod[1], modFnParams) !== false && needSetMod;
+            });
+
+            !elem && needSetMod && (_this._modCache[modName] = modVal);
+
+            needSetMod && _this._afterSetMod(modName, modVal, curModVal, elem, elemName);
+
+            delete this._processingMods[modId];
+        }
+
+        return _this;
+
+    },
+
+    /**
+     * Function after successfully changing the modifier of the block/nested element
+     * @protected
+     * @param {String} modName Modifier name
+     * @param {String} modVal Modifier value
+     * @param {String} oldModVal Old modifier value
+     * @param {Object} [elem] Nested element
+     * @param {String} [elemName] Element name
+     */
+    _afterSetMod : function(modName, modVal, oldModVal, elem, elemName) {},
+
+    /**
+     * Sets a modifier for a block/nested element, depending on conditions.
+     * If the condition parameter is passed: when true, modVal1 is set; when false, modVal2 is set.
+     * If the condition parameter is not passed: modVal1 is set if modVal2 was set, or vice versa.
+     * @protected
+     * @param {Object} [elem] Nested element
+     * @param {String} modName Modifier name
+     * @param {String} modVal1 First modifier value
+     * @param {String} [modVal2] Second modifier value
+     * @param {Boolean} [condition] Condition
+     * @returns {BEM}
+     */
+    toggleMod : function(elem, modName, modVal1, modVal2, condition) {
+
+        if(typeof elem == 'string') { // if this is a block
+            condition = modVal2;
+            modVal2 = modVal1;
+            modVal1 = modName;
+            modName = elem;
+            elem = undefined;
+        }
+        if(typeof modVal2 == 'undefined') {
+            modVal2 = '';
+        } else if(typeof modVal2 == 'boolean') {
+            condition = modVal2;
+            modVal2 = '';
+        }
+
+        var modVal = this.getMod(elem, modName);
+        (modVal == modVal1 || modVal == modVal2) &&
+            this.setMod(
+                elem,
+                modName,
+                typeof condition === 'boolean'?
+                    (condition? modVal1 : modVal2) :
+                    this.hasMod(elem, modName, modVal1)? modVal2 : modVal1);
+
+        return this;
+
+    },
+
+    /**
+     * Removes a modifier from a block/nested element
+     * @protected
+     * @param {Object} [elem] Nested element
+     * @param {String} modName Modifier name
+     * @returns {BEM}
+     */
+    delMod : function(elem, modName) {
+
+        if(!modName) {
+            modName = elem;
+            elem = undefined;
+        }
+
+        return this.setMod(elem, modName, '');
+
+    },
+
+    /**
+     * Executes handlers for setting modifiers
+     * @private
+     * @param {String} elemName Element name
+     * @param {String} modName Modifier name
+     * @param {String} modVal Modifier value
+     * @param {Array} modFnParams Handler parameters
+     */
+    _callModFn : function(elemName, modName, modVal, modFnParams) {
+
+        var modFnName = buildModFnName(elemName, modName, modVal);
+        return this[modFnName]?
+           this[modFnName].apply(this, modFnParams) :
+           undefined;
+
+    },
+
+    /**
+     * Retrieves the value of the modifier
+     * @private
+     * @param {String} modName Modifier name
+     * @param {Object} [elem] Element
+     * @returns {String} Modifier value
+     */
+    _extractModVal : function(modName, elem) {
+
+        return '';
+
+    },
+
+    /**
+     * Retrieves name/value for a list of modifiers
+     * @private
+     * @param {Array} modNames Names of modifiers
+     * @param {Object} [elem] Element
+     * @returns {Object} Hash of modifier values by name
+     */
+    _extractMods : function(modNames, elem) {
+
+        return {};
+
+    },
+
+    /**
+     * Returns a named communication channel
+     * @param {String} [id='default'] Channel ID
+     * @param {Boolean} [drop=false] Destroy the channel
+     * @returns {$.observable|undefined} Communication channel
+     */
+    channel : function(id, drop) {
+
+        return this.__self.channel(id, drop);
+
+    },
+
+    /**
+     * Returns a block's default parameters
+     * @returns {Object}
+     */
+    getDefaultParams : function() {
+
+        return {};
+
+    },
+
+    /**
+     * Helper for cleaning up block properties
+     * @param {Object} [obj=this]
+     */
+    del : function(obj) {
+
+        var args = [].slice.call(arguments);
+        typeof obj == 'string' && args.unshift(this);
+        this.__self.del.apply(this.__self, args);
+        return this;
+
+	},
+
+    /**
+     * Deletes a block
+     */
+    destruct : function() {}
+
+}, /** @lends BEM */{
+
+    _name : 'i-bem',
+
+    /**
+     * Storage for block declarations (hash by block name)
+     * @static
+     * @protected
+     * @type Object
+     */
+    blocks : blocks,
+
+    /**
+     * Declares blocks and creates a block class
+     * @static
+     * @protected
+     * @param {String|Object} decl Block name (simple syntax) or description
+     * @param {String} decl.block|decl.name Block name
+     * @param {String} [decl.baseBlock] Name of the parent block
+     * @param {String} [decl.modName] Modifier name
+     * @param {String} [decl.modVal] Modifier value
+     * @param {Object} [props] Methods
+     * @param {Object} [staticProps] Static methods
+     */
+    decl : function(decl, props, staticProps) {
+
+        if(typeof decl == 'string')
+            decl = { block : decl };
+        else if(decl.name) {
+            decl.block = decl.name;
+        }
+
+        if(decl.baseBlock && !blocks[decl.baseBlock])
+            throw('baseBlock "' + decl.baseBlock + '" for "' + decl.block + '" is undefined');
+
+        props || (props = {});
+
+        if(props.onSetMod) {
+            modFnsToProps(props.onSetMod, props);
+            delete props.onSetMod;
+        }
+
+        if(props.onElemSetMod) {
+            $.each(props.onElemSetMod, function(elemName, modFns) {
+                modFnsToProps(modFns, props, elemName);
+            });
+            delete props.onElemSetMod;
+        }
+
+        var baseBlock = blocks[decl.baseBlock || decl.block] || this;
+
+        if(decl.modName) {
+            var checkMod = buildCheckMod(decl.modName, decl.modVal);
+            $.each(props, function(name, prop) {
+                $.isFunction(prop) &&
+                    (props[name] = function() {
+                        var method;
+                        if(checkMod(this)) {
+                            method = prop;
+                        } else {
+                            var baseMethod = baseBlock.prototype[name];
+                            baseMethod && baseMethod !== props[name] &&
+                                (method = this.__base);
+                        }
+                        return method?
+                            method.apply(this, arguments) :
+                            undefined;
+                    });
+            });
+        }
+
+        var block;
+        decl.block == baseBlock._name?
+            // makes a new "live" if the old one was already executed
+            (block = $.inheritSelf(baseBlock, props, staticProps))._processLive(true) :
+            (block = blocks[decl.block] = $.inherit(baseBlock, props, staticProps))._name = decl.block;
+
+        return block;
+
+    },
+
+    /**
+     * Processes a block's live properties
+     * @private
+     * @param {Boolean} [heedLive=false] Whether to take into account that the block already processed its live properties
+     * @returns {Boolean} Whether the block is a live block
+     */
+    _processLive : function(heedLive) {
+
+        return false;
+
+    },
+
+    /**
+     * Factory method for creating an instance of the block named
+     * @static
+     * @param {String|Object} block Block name or description
+     * @param {Object} [params] Block parameters
+     * @returns {BEM}
+     */
+    create : function(block, params) {
+
+        typeof block == 'string' && (block = { block : block });
+
+        return new blocks[block.block](block.mods, params);
+
+    },
+
+    /**
+     * Returns the name of the current block
+     * @static
+     * @protected
+     * @returns {String}
+     */
+    getName : function() {
+
+        return this._name;
+
+    },
+
+    /**
+     * Retrieves the name of an element nested in a block
+     * @static
+     * @private
+     * @param {Object} elem Nested element
+     * @returns {String|undefined}
+     */
+    _extractElemNameFrom : function(elem) {},
+
+    /**
+     * Adds a function to the queue for executing after the "current event"
+     * @static
+     * @protected
+     * @param {Function} fn
+     * @param {Object} ctx
+     */
+    afterCurrentEvent : function(fn, ctx) {
+
+        afterCurrentEventFns.push({ fn : fn, ctx : ctx }) == 1 &&
+            setTimeout(this._runAfterCurrentEventFns, 0);
+
+    },
+
+    /**
+     * Executes the queue
+     * @private
+     */
+    _runAfterCurrentEventFns : function() {
+
+        var fnsLen = afterCurrentEventFns.length;
+        if(fnsLen) {
+            var fnObj,
+                fnsCopy = afterCurrentEventFns.splice(0, fnsLen);
+
+            while(fnObj = fnsCopy.shift()) fnObj.fn.call(fnObj.ctx || this);
+        }
+
+    },
+
+    /**
+     * Changes the context of the function being passed
+     * @protected
+     * @param {Function} fn
+     * @param {Object} ctx Context
+     * @returns {Function} Function with a modified context
+     */
+    changeThis : function(fn, ctx) {
+
+        return fn.bind(ctx || this);
+
+    },
+
+    /**
+     * Helper for cleaning out properties
+     * @param {Object} [obj=this]
+     */
+    del : function(obj) {
+
+        var delInThis = typeof obj == 'string',
+            i = delInThis? 0 : 1,
+            len = arguments.length;
+        delInThis && (obj = this);
+
+        while(i < len) delete obj[arguments[i++]];
+
+        return this;
+
+	},
+
+    /**
+     * Returns/destroys a named communication channel
+     * @param {String} [id='default'] Channel ID
+     * @param {Boolean} [drop=false] Destroy the channel
+     * @returns {$.observable|undefined} Communication channel
+     */
+    channel : function(id, drop) {
+
+        if(typeof id == 'boolean') {
+            drop = id;
+            id = undefined;
+        }
+
+        id || (id = 'default');
+
+        if(drop) {
+            if(channels[id]) {
+                channels[id].un();
+                delete channels[id];
+            }
+            return;
+        }
+
+        return channels[id] || (channels[id] = new $.observable());
+
+    }
+
+});
+
+})(jQuery);;
+/* ../../lego/bem-bl/blocks-common/i-bem/i-bem.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-ecma/__object/i-ecma__object.js: begin */ /**/
+(function() {
+
+/**
+ * Возвращает массив свойств объекта
+ * @param {Object} obj объект
+ * @returns {Array}
+ */
+Object.keys || (Object.keys = function(obj) {
+    var res = [];
+
+    for(var i in obj) obj.hasOwnProperty(i) &&
+        res.push(i);
+
+    return res;
+});
+
+})();;
+/* ../../lego/bem-bl/blocks-common/i-ecma/__object/i-ecma__object.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-ecma/__array/i-ecma__array.js: begin */ /**/
+(function() {
+
+var ptp = Array.prototype,
+    toStr = Object.prototype.toString,
+    methods = {
+
+        /**
+         * Finds the index of an element in an array
+         * @param {Object} item
+         * @param {Number} [fromIdx] Starting from index (length - 1 - fromIdx, if fromIdx < 0)
+         * @returns {Number} Element index or -1, if not found
+         */
+        indexOf : function(item, fromIdx) {
+
+            fromIdx = +(fromIdx || 0);
+
+            var t = this, len = t.length;
+
+            if(len > 0 && fromIdx < len) {
+                fromIdx = fromIdx < 0? Math.ceil(fromIdx) : Math.floor(fromIdx);
+                fromIdx < -len && (fromIdx = 0);
+                fromIdx < 0 && (fromIdx = fromIdx + len);
+
+                while(fromIdx < len) {
+                    if(fromIdx in t && t[fromIdx] === item)
+                        return fromIdx;
+                    ++fromIdx;
+                }
+            }
+
+            return -1;
+
+        },
+
+        /**
+         * Calls the callback for each element
+         * @param {Function} callback Called for each element
+         * @param {Object} [ctx=null] Callback context
+         */
+        forEach : function(callback, ctx) {
+
+            var i = -1, t = this, len = t.length;
+            while(++i < len) i in t &&
+                (ctx? callback.call(ctx, t[i], i, t) : callback(t[i], i, t));
+
+        },
+
+        /**
+         * Creates array B from array A so that B[i] = callback(A[i])
+         * @param {Function} callback Called for each element
+         * @param {Object} [ctx=null] Callback context
+         * @returns {Array}
+         */
+        map : function(callback, ctx) {
+
+            var i = -1, t = this, len = t.length,
+                res = new Array(len);
+
+            while(++i < len) i in t &&
+                (res[i] = ctx? callback.call(ctx, t[i], i, t) : callback(t[i], i, t));
+
+            return res;
+
+        },
+
+        /**
+         * Creates an array containing only the elements from the source array that the callback returns true for. 
+         * @param {Function} callback Called for each element
+         * @param {Object} [ctx] Callback context
+         * @returns {Array}
+         */
+        filter : function(callback, ctx) {
+
+            var i = -1, t = this, len = t.length,
+                res = [];
+
+            while(++i < len) i in t &&
+                (ctx? callback.call(ctx, t[i], i, t) : callback(t[i], i, t)) && res.push(t[i]);
+
+            return res;
+
+        },
+
+        /**
+         * Wraps the array using an accumulator
+         * @param {Function} callback Called for each element
+         * @param {Object} [initialVal] Initial value of the accumulator
+         * @returns {Object} Accumulator
+         */
+        reduce : function(callback, initialVal) {
+
+            var i = -1, t = this, len = t.length,
+                res;
+
+            if(arguments.length < 2) {
+                while(++i < len) {
+                    if(i in t) {
+                        res = t[i];
+                        break;
+                    }
+                }
+            }
+            else {
+                res = initialVal;
+            }
+
+            while(++i < len) i in t &&
+                (res = callback(res, t[i], i, t));
+
+            return res;
+
+        },
+
+        /**
+         * Checks whether at least one element in the array meets the condition in the callback
+         * @param {Function} callback
+         * @param {Object} [ctx=this] Callback context
+         * @returns {Boolean}
+         */
+        some : function(callback, ctx) {
+
+            var i = -1, t = this, len = t.length;
+
+            while(++i < len)
+                if(i in t && (ctx ? callback.call(ctx, t[i], i, t) : callback(t[i], i, t)))
+                    return true;
+
+            return false;
+
+        },
+
+        /**
+         * Checks whether every element in the array meets the condition in the callback
+         * @param {Function} callback
+         * @param {Object} [ctx=this] Context of the callback call
+         * @returns {Boolean}
+         */
+        every : function(callback, ctx) {
+
+            var i = -1, t = this, len = t.length;
+
+            while(++i < len)
+                if(i in t && !(ctx ? callback.call(ctx, t[i], i, t) : callback(t[i], i, t)))
+                    return false;
+
+            return true;
+
+        }
+
+    };
+
+for(var name in methods)
+    ptp[name] || (ptp[name] = methods[name]);
+
+Array.isArray || (Array.isArray = function(obj) {
+    return toStr.call(obj) === '[object Array]';
+});
+
+})();;
+/* ../../lego/bem-bl/blocks-common/i-ecma/__array/i-ecma__array.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-ecma/__function/i-ecma__function.js: begin */ /**/
+(function() {
+
+var slice = Array.prototype.slice;
+
+Function.prototype.bind || (Function.prototype.bind = function(ctx) {
+
+    var fn = this,
+        args = slice.call(arguments, 1);
+
+    return function () {
+        return fn.apply(ctx, args.concat(slice.call(arguments)));
+    }
+
+});
+
+})();;
+/* ../../lego/bem-bl/blocks-common/i-ecma/__function/i-ecma__function.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-bem/__internal/i-bem__internal.js: begin */ /**/
+/** @fileOverview Module for internal BEM helpers */
+/** @requires BEM */
+
+(function(BEM, $, undefined) {
+
+/**
+ * Separator for modifiers and their values
+ * @const
+ * @type String
+ */
+var MOD_DELIM = '_',
+
+/**
+ * Separator between names of a block and a nested element
+ * @const
+ * @type String
+ */
+    ELEM_DELIM = '__',
+
+/**
+ * Pattern for acceptable element and modifier names
+ * @const
+ * @type String
+ */
+    NAME_PATTERN = '[a-zA-Z0-9-]+';
+
+function buildModPostfix(modName, modVal, buffer) {
+
+    buffer.push(MOD_DELIM, modName, MOD_DELIM, modVal);
+
+}
+
+function buildBlockClass(name, modName, modVal, buffer) {
+
+    buffer.push(name);
+    modVal && buildModPostfix(modName, modVal, buffer);
+
+}
+
+function buildElemClass(block, name, modName, modVal, buffer) {
+
+    buildBlockClass(block, undefined, undefined, buffer);
+    buffer.push(ELEM_DELIM, name);
+    modVal && buildModPostfix(modName, modVal, buffer);
+
+}
+
+BEM.INTERNAL = {
+
+    NAME_PATTERN : NAME_PATTERN,
+
+    MOD_DELIM : MOD_DELIM,
+    ELEM_DELIM : ELEM_DELIM,
+
+    buildModPostfix : function(modName, modVal, buffer) {
+
+        var res = buffer || [];
+        buildModPostfix(modName, modVal, res);
+        return buffer? res : res.join('');
+
+    },
+
+    /**
+     * Builds the class of a block or element with a modifier
+     * @private
+     * @param {String} block Block name
+     * @param {String} [elem] Element name
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @param {Array} [buffer] Buffer
+     * @returns {String|Array} Class or buffer string (depending on whether the buffer parameter is present)
+     */
+    buildClass : function(block, elem, modName, modVal, buffer) {
+
+        var typeOf = typeof modName;
+        if(typeOf == 'string') {
+            if(typeof modVal != 'string') {
+                buffer = modVal;
+                modVal = modName;
+                modName = elem;
+                elem = undefined;
+            }
+        } else if(typeOf != 'undefined') {
+            buffer = modName;
+            modName = undefined;
+        } else if(elem && typeof elem != 'string') {
+            buffer = elem;
+            elem = undefined;
+        }
+
+        if(!(elem || modName || buffer)) { // оптимизация для самого простого случая
+            return block;
+        }
+
+        var res = buffer || [];
+
+        elem?
+            buildElemClass(block, elem, modName, modVal, res) :
+            buildBlockClass(block, modName, modVal, res);
+
+        return buffer? res : res.join('');
+
+    },
+
+    /**
+     * Builds full classes for a buffer or element with modifiers
+     * @private
+     * @param {String} block Block name
+     * @param {String} [elem] Element name
+     * @param {Object} [mods] Modifiers
+     * @param {Array} [buffer] Buffer
+     * @returns {String|Array} Class or buffer string (depending on whether the buffer parameter is present)
+     */
+    buildClasses : function(block, elem, mods, buffer) {
+
+        if(elem && typeof elem != 'string') {
+            buffer = mods;
+            mods = elem;
+            elem = undefined;
+        }
+
+        var res = buffer || [];
+
+        elem?
+            buildElemClass(block, elem, undefined, undefined, res) :
+            buildBlockClass(block, undefined, undefined, res);
+
+        mods && $.each(mods, function(modName, modVal) {
+            if(modVal) {
+                res.push(' ');
+                elem?
+                    buildElemClass(block, elem, modName, modVal, res) :
+                    buildBlockClass(block, modName, modVal, res);
+            }
+        });
+
+        return buffer? res : res.join('');
+
+        /*var typeOf = typeof elem;
+        if(typeOf != 'string' && typeOf != 'undefined') {
+            buffer = mods;
+            mods = elem;
+            elem = undefined;
+        }
+        if($.isArray(mods)) {
+            buffer = mods;
+            mods = undefined;
+        }
+
+        var res = buffer || [];
+        buildClasses(block, elem, mods, res);
+        return buffer? res : res.join('');*/
+
+    }
+
+}
+
+})(BEM, jQuery);;
+/* ../../lego/bem-bl/blocks-common/i-bem/__internal/i-bem__internal.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-jquery/__cookie/i-jquery__cookie.js: begin */ /**/
+/**
+ * Cookie plugin
+ *
+ * Copyright (c) 2006 Klaus Hartl (stilbuero.de)
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ */
+
+/**
+ * Create a cookie with the given name and value and other optional parameters.
+ *
+ * @example $.cookie('the_cookie', 'the_value');
+ * @desc Set the value of a cookie.
+ * @example $.cookie('the_cookie', 'the_value', { expires: 7, path: '/', domain: 'jquery.com', secure: true });
+ * @desc Create a cookie with all available options.
+ * @example $.cookie('the_cookie', 'the_value');
+ * @desc Create a session cookie.
+ * @example $.cookie('the_cookie', null);
+ * @desc Delete a cookie by passing null as value. Keep in mind that you have to use the same path and domain
+ *       used when the cookie was set.
+ *
+ * @param String name The name of the cookie.
+ * @param String value The value of the cookie.
+ * @param Object options An object literal containing key/value pairs to provide optional cookie attributes.
+ * @option Number|Date expires Either an integer specifying the expiration date from now on in days or a Date object.
+ *                             If a negative value is specified (e.g. a date in the past), the cookie will be deleted.
+ *                             If set to null or omitted, the cookie will be a session cookie and will not be retained
+ *                             when the the browser exits.
+ * @option String path The value of the path atribute of the cookie (default: path of page that created the cookie).
+ * @option String domain The value of the domain attribute of the cookie (default: domain of page that created the cookie).
+ * @option Boolean secure If true, the secure attribute of the cookie will be set and the cookie transmission will
+ *                        require a secure protocol (like HTTPS).
+ * @type undefined
+ *
+ * @name $.cookie
+ * @cat Plugins/Cookie
+ * @author Klaus Hartl/klaus.hartl@stilbuero.de
+ */
+
+/**
+ * Get the value of a cookie with the given name.
+ *
+ * @example $.cookie('the_cookie');
+ * @desc Get the value of a cookie.
+ *
+ * @param String name The name of the cookie.
+ * @return The value of the cookie.
+ * @type String
+ *
+ * @name $.cookie
+ * @cat Plugins/Cookie
+ * @author Klaus Hartl/klaus.hartl@stilbuero.de
+ */
+jQuery.cookie = function(name, value, options) {
+    if (typeof value != 'undefined') { // name and value given, set cookie
+        options = options || {};
+        if (value === null) {
+            value = '';
+            options.expires = -1;
+        }
+        var expires = '';
+        if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
+            var date;
+            if (typeof options.expires == 'number') {
+                date = new Date();
+                date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
+            } else {
+                date = options.expires;
+            }
+            expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
+        }
+        // CAUTION: Needed to parenthesize options.path and options.domain
+        // in the following expressions, otherwise they evaluate to undefined
+        // in the packed version for some reason...
+        var path = options.path ? '; path=' + (options.path) : '';
+        var domain = options.domain ? '; domain=' + (options.domain) : '';
+        var secure = options.secure ? '; secure' : '';
+        document.cookie = [name, '=', encodeURIComponent(value), expires, path, domain, secure].join('');
+    } else { // only name given, get cookie
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+};;
+/* ../../lego/bem-bl/blocks-common/i-jquery/__cookie/i-jquery__cookie.js: end */ /**/
+
+/* ../../lego/blocks-desktop/i-bem/html/i-bem__html.js: begin */ /**/
+/** @requires BEM */
+/** @requires BEM.INTERNAL */
+/** @requires jquery.stringify */
+
+(function(BEM, $, undefined) {
+
+var INTERNAL = BEM.INTERNAL,
+    ELEM_DELIM = INTERNAL.ELEM_DELIM,
+    SHORT_TAGS = { // хэш для быстрого определения, является ли тэг коротким
+        area : 1, base : 1, br : 1, col : 1, command : 1, embed : 1, hr : 1, img : 1,
+        input : 1, keygen : 1, link : 1, meta : 1, param : 1, source : 1, wbr : 1 },
+    buildClass = INTERNAL.buildClass,
+    buildClasses = INTERNAL.buildClasses,
+    decls = {};
+
+function addPropToDecl(decl, name, fn) {
+
+    (decl[name] || (decl[name] = [])).unshift(fn);
+
+}
+
+function buildDeclFn(fn, desc) {
+
+    return desc.modName?
+        function(ctx) {
+            (ctx._curBlock.mods || {})[desc.modName] === desc.modVal && fn(ctx);
+        } :
+        fn;
+
+}
+
+function join(a, b) {
+
+    var isArrayB = $.isArray(b),
+        res;
+
+    $.isArray(a)?
+        isArrayB? res = a.concat(b) : (res = a).push(b) :
+        isArrayB? (res = b).unshift(a) : res = [a, b];
+
+    return res;
+
+}
+
+var attrEscapes = { '\'' : '\\\'', '"': '\'', '&': '&amp;', '<': '&lt;', '>': '&gt;' },
+    attrEscapesRE = /['"&<>]/g;
+function escapeAttr(attrVal) {
+    return attrVal.replace(attrEscapesRE, function(needToEscape) {
+        return attrEscapes[needToEscape];
+    });
+}
+
+/**
+ * @namespace
+ * @name BEM.HTML
+ */
+BEM.HTML = {
+
+    /**
+     * Декларация
+     * @protected
+     * @param {String|Object} decl имя блока (простой синтаксис) или описание
+     * @param {String} decl.block имя блока
+     * @param {String} [decl.modName] имя модификатора
+     * @param {String} [decl.modVal] значение модификатора
+     * @param {Object} props свойства
+     */
+    decl : function(desc, props) {
+
+        typeof desc == 'string' && (desc = { block : desc });
+        desc.name && (desc.block = desc.name);
+
+        var decl = decls[desc.block] || (decls[desc.block] = {});
+
+        props.onBlock && addPropToDecl(decl, '_block', buildDeclFn(props.onBlock, desc));
+
+        if(props.onElem) {
+            $.isFunction(props.onElem)?
+                addPropToDecl(decl, '_elem', buildDeclFn(props.onElem, desc)) :
+                $.each(props.onElem, function(elem, fn) {
+                    addPropToDecl(decl, '_elem' + (elem === '*'? '' : ELEM_DELIM + elem), buildDeclFn(fn, desc));
+                });
+        }
+
+    },
+
+    /**
+     * Строит HTML-представление
+     * @param {Object|Array} params JSON-описание
+     */
+    build : function(params) {
+
+        var builder = new this.Ctx(params);
+        builder._buildAll();
+        return builder._flush();
+
+    },
+
+    Ctx : $.inherit(/** @lends BEM.HTML.Ctx.prototype */{
+        /**
+         * @class Внутренний класс контекста билдера HTML-представления
+         * @constructs
+         * @param {Object|Array|String} params параметры
+         */
+        __constructor : function(params) {
+
+            /**
+             * буфер
+             * @private
+             * @type Array
+             */
+            this._buffer = [];
+
+            /**
+             * текущие параметры
+             * @private
+             * @type Object
+             */
+            this._params = params;
+
+            /**
+             * туннелированные параметры
+             * @private
+             * @type Object
+             */
+            this._tParams = null;
+
+            this._tParamsChanges = null;
+
+            /**
+             * имя текущего блока
+             * @private
+             * @type String
+             */
+            this._curBlock = undefined;
+
+        },
+
+        /**
+         * Возвращает позицию контекста
+         * @returns {Number}
+         */
+        pos : function() {
+
+            return this._params._pos;
+
+        },
+
+        /**
+         * Проверяет, является ли текущий контекст первым
+         * @returns {Boolean}
+         */
+        isFirst : function() {
+
+            return this._params._pos === 1;
+
+        },
+
+        /**
+         * Проверяет, является ли текущий контекст последним
+         * @returns {Boolean}
+         */
+        isLast : function() {
+
+            var params = this._params;
+            return params._pos === params._siblingsCount;
+
+        },
+
+        /**
+         * Возвращает/устанавливает параметры контекста
+         * @param {Object} [params] параметры
+         */
+        params : function(params) {
+
+            var _this = this;
+            if(typeof params == 'undefined') return _this._params;
+
+            _this._params = params;
+            return _this;
+
+        },
+
+        /**
+         * Возвращает/устанавливает один параметр контекста
+         * @param {String} name имя параметра
+         * @param {String} [val] значение параметра
+         * @param {Boolean} [force=false] установить параметр независимо от его наличия в контексте
+         * @param {Boolean} [needExtend=false] расширять параметр
+         */
+        param : function(name, val, force, needExtend) {
+
+            var _this = this,
+                params = _this._params;
+
+            if(typeof val == 'undefined') return params[name];
+
+            if(force || !(name in params)) {
+                params[name] = val;
+            } else if(needExtend) {
+                params[name] = $.extend(val, params[name]);
+            }
+
+            return _this;
+
+        },
+
+        /**
+         * Возвращает/устанавливает html-атрибуты контекста (шорткат к params('attrs', val))
+         * @param {Object} [val] хэш атрибутов
+         * @param {Boolean} [force=false]
+         */
+        attrs : function(val, force) {
+
+            return this.param('attrs', val, force, true);
+
+        },
+
+        /**
+         * Возвращает/устанавливает один html-атрибут контекста
+         * @param {String} name имя атрибута
+         * @param {String} [val] значение атрибута
+         * @param {Boolean} [force=false]
+         */
+        attr : function(name, val, force) {
+
+            var _this = this;
+            if(typeof val == 'undefined') return (_this._params.attrs || {})[name];
+
+            var attrs = _this._params.attrs;
+            attrs?
+                (force || !(name in attrs)) && (attrs[name] = val) :
+                (_this._params.attrs = {})[name] = val;
+
+            return _this;
+
+        },
+
+        /**
+         * Возвращает/устанавливает имя html-тэга контекста (шорткат к params('tag', val))
+         * @param {String} [val] тэг
+         * @param {Boolean} [force=false]
+         */
+        tag : function(val, force) {
+
+            return this.param('tag', val, force);
+
+        },
+
+        /**
+         * Возвращает/устанавливает дополнительные CSS-классы контекста (шорткат к params('cls', val))
+         * @param {String} [val] CSS-класс
+         * @param {Boolean} [force=false]
+         */
+        cls : function(val, force) {
+
+            return this.param('cls', val, force);
+
+        },
+
+        /**
+         * Возвращает/устанавливает модификаторы контекста (шорткат к params('mods', val))
+         * @param {Object} [val] хэш модификаторов
+         * @param {Boolean} [force=false]
+         */
+        mods : function(val, force) {
+
+            return this.param('mods', val, force, true);
+
+        },
+
+        /**
+         * Возвращает/устанавливает один модификатор контекста
+         * @param {String} name имя модификатора
+         * @param {String} [val] значение модификатора
+         * @param {Boolean} [force=false]
+         */
+        mod : function(name, val, force) {
+
+            var _this = this;
+            if(typeof val == 'undefined') return (_this._params.mods || {})[name];
+
+            var mods = _this._params.mods;
+            mods?
+                (force || !(name in mods)) && (mods[name] = val) :
+                (_this._params.mods = {})[name] = val;
+
+            return _this;
+
+        },
+
+        /**
+         * Возвращает/добавляет/устанавливает миксы
+         * @param {Array} [val] миксы
+         * @param {Boolean} [force=false]
+         */
+        mix : function(val, force) {
+
+            var _this = this,
+                params = _this._params;
+
+            if(typeof val == 'undefined') return params.mix;
+
+            if(force || !('mix' in params)) {
+                params.mix = val;
+            } else {
+                params.mix = params.mix.concat(val);
+            }
+
+            return _this;
+
+        },
+
+        /**
+         * Возвращает/устанавливает js-параметры контекста (шорткат к params('js', val))
+         * @param {Boolean|Object} [val] параметры
+         */
+        js : function(val) {
+
+            return this.param('js', val);
+
+        },
+
+        /**
+         * Возвращает/устанавливает контент контекста (шорткат к params('content', val))
+         * @param {String|Object|Array} [val] контент
+         * @param {Boolean} [force=false] установить контент независимо от его наличия
+         */
+        content : function(val, force) {
+
+            return this.param('content', val, force);
+
+        },
+
+        /**
+         * Оборачивает контент контекста (например, другим элементом)
+         * @param {Object} obj
+         */
+        wrapContent : function(obj) {
+
+            var _this = this,
+                params = _this._params;
+
+            obj.content = params.content;
+            params.content = obj;
+
+            return _this;
+
+        },
+
+        /**
+         * Добавляет контент перед контентом контекста (например, еще один элемент)
+         * @param {Object|Array} obj
+         */
+        beforeContent : function(obj) {
+
+            var _this = this,
+                params = _this._params;
+
+            params.content = join(obj, params.content);
+
+            return _this;
+
+        },
+
+        /**
+         * Добавляет контент после контента контекста (например, еще один элемент)
+         * @param {Object|Array} obj
+         */
+        afterContent : function(obj) {
+
+            var _this = this,
+                params = _this._params;
+
+            params.content = join(params.content, obj);
+
+            return _this;
+
+        },
+
+        /**
+         * Оборачивает контекста (например, другим элементом или блоком)
+         * @param {Object} obj
+         */
+        wrap : function(obj) {
+
+            var _this = this,
+                params = _this._params;
+
+            obj.block || (obj._curBlock = _this._curBlock);
+            obj.content = params._wrapper? params._wrapper : params;
+            params._wrapper = obj;
+
+            return _this;
+
+        },
+
+        /**
+         * Возвращает/устанавливает один туннелированный параметр контекста
+         * @param {String} name имя параметра
+         * @param {String} [val] значение параметра
+         */
+        tParam : function(name, val) {
+
+            var _this = this,
+                tParams = _this._tParams || (_this._tParams = {});
+
+            if(typeof val == 'undefined') return tParams[name];
+
+            var tParamsChanges = _this._tParamsChanges || (_this._tParamsChanges = {});
+
+            name in tParamsChanges || (tParamsChanges[name] = tParams[name]);
+
+            tParams[name] = val;
+
+            return _this;
+
+        },
+
+        /**
+         * Генерирует уникальный идентификатор
+         * returns {String}
+         */
+        generateId : function() {
+
+            return $.identify();
+
+        },
+
+        /**
+         * Останавливает применение более базовых шаблонов
+         */
+        stop : function() {
+
+            this._params._isStopped = true;
+
+        },
+
+        /**
+         * Выполняет одну итерацию билда в зависимости от типа контекста
+         * @private
+         */
+        _buildAll : function() {
+
+            var _this = this,
+                buffer = _this._buffer,
+                params = _this._params,
+                paramsType = typeof params;
+
+            if(paramsType == 'string' || paramsType == 'number') {
+                buffer.push(params);
+            } else if($.isArray(params)) {
+                var i = 0, len = params.length, currParams, currParamsType;
+                while(i < len) {
+                     _this._params = currParams = params[i++];
+                    currParamsType = typeof currParams;
+                    if(currParamsType == 'string' || currParamsType == 'number') {
+                        buffer.push(currParams);
+                    } else if(currParams) {
+                        currParams._pos = i;
+                        currParams._siblingsCount = len;
+                        _this._buildByDecl();
+                    }
+                }
+            } else if(params) {
+                _this._params._pos = _this._params._siblingsCount = 1;
+                _this._buildByDecl();
+            }
+
+        },
+
+        /**
+         * Дефолтный билд
+         * @private
+         */
+        _build : function() {
+
+            var _this = this,
+                buffer = _this._buffer,
+                params = _this._params,
+                tag = params.tag || 'div',
+                jsParams,
+                isBEM = params.block || params.elem,
+                curBlock = isBEM && (params.block || _this._curBlock.block),
+                addInitingCls = false;
+
+            if(params.js) {
+                (jsParams = {})[buildClass(curBlock, params.elem)] = params.js === true? {} : params.js;
+                addInitingCls = !params.elem;
+            }
+
+            buffer.push('<', tag);
+
+            if(isBEM || params.cls) {
+                buffer.push(' class="');
+                if(isBEM) {
+                    buildClasses(curBlock, params.elem, params.mods, buffer);
+                    params.mix && $.each(params.mix, function(i, mix) {
+                        if(mix) {
+                            buffer.push(' ');
+                            buildClasses(mix.block, mix.elem, mix.mods, buffer);
+                            if(mix.js) {
+                                (jsParams || (jsParams = {}))[buildClass(mix.block, mix.elem)] = mix.js === true? {} : mix.js;
+                                addInitingCls || (addInitingCls = !mix.elem);
+                            }
+                        }
+                    });
+                }
+
+                params.cls && buffer.push(isBEM? ' ' : '', params.cls);
+
+                addInitingCls && buffer.push(' i-bem');
+                buffer.push('"');
+            }
+
+            jsParams && buffer.push(
+                ' onclick="return ',
+                escapeAttr(JSON.stringify(jsParams)),
+                '"');
+
+            params.attrs && $.each(params.attrs, function(name, val) {
+                typeof val != 'undefined' && val !== null && val !== false && buffer.push(
+                    ' ',
+                    name,
+                    '="',
+                    val.toString().replace(/"/g, "&quot;"),
+                    '"');
+            });
+
+            if(SHORT_TAGS[tag]) {
+                buffer.push('/>');
+            } else {
+                buffer.push('>');
+
+                if(typeof params.content != 'undefined') {
+                    _this._params = params.content;
+                    _this._buildAll();
+                }
+
+                buffer.push('</', tag, '>');
+            }
+
+        },
+
+        /**
+         * Очищает буфер и возвращает его содержимое
+         * @private
+         * @returns {String} содержимое буфера
+         */
+        _flush : function() {
+
+            var res = this._buffer.join('');
+            delete this._buffer;
+            return res;
+
+        },
+
+        _buildByDecl : function() {
+
+            var _this = this,
+                currBlock = _this._curBlock,
+                params = _this._params;
+
+            params._curBlock && (_this._curBlock = params._curBlock);
+            params.block && (_this._curBlock = params);
+
+            if(!params._wrapper) {
+                if(params.block || params.elem) {
+                    var decl = decls[_this._curBlock.block];
+                    if(decl) {
+                        var fns;
+                        if(params.elem) {
+                            fns = decl['_elem' + ELEM_DELIM + params.elem];
+                            decl._elem && (fns = (fns? fns.concat(decl._elem) : decl._elem));
+                        } else {
+                            fns = decl._block;
+                        }
+
+                        if(fns) {
+                            var i = 0, fn;
+                            while(fn = fns[i++]) {
+                                fn(_this);
+                                if(params._isStopped) break;
+                            }
+                        }
+                    }
+                }
+
+                if(params._wrapper) {
+                    params._curBlock = _this._curBlock;
+                    _this._params = params._wrapper;
+                    return _this._buildAll();
+                }
+            }
+
+            var tParamsChanges = _this._tParamsChanges;
+                _this._tParamsChanges = null;
+
+            _this._build();
+
+            _this._curBlock = currBlock;
+
+            if(tParamsChanges) {
+                var tParams = _this._tParams;
+                $.each(tParamsChanges, function(name, val) {
+                    typeof val == 'undefined'?
+                        delete tParams[name] :
+                        tParams[name] = val;
+                });
+            }
+
+        }
+
+    })
+
+};
+
+})(BEM, jQuery);
+;
+/* ../../lego/blocks-desktop/i-bem/html/i-bem__html.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-ecma/__json/i-ecma__json.js: begin */ /**/
+(function(undefined) {
+
+if(window.JSON) return;
+
+var _toString = Object.prototype.toString,
+    escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+    meta = {
+        '\b' : '\\b',
+        '\t' : '\\t',
+        '\n' : '\\n',
+        '\f' : '\\f',
+        '\r' : '\\r',
+        '"'  : '\\"',
+        '\\' : '\\\\'
+    },
+    stringify;
+
+window.JSON = {
+    stringify : stringify = function(val) {
+        if(val === null) {
+            return 'null';
+        }
+        if(typeof val === 'undefined') {
+            return undefined;
+        }
+        switch(_toString.call(val)) {
+            case '[object String]':
+                return '"' +
+                    (escapable.test(val)?
+                        val.replace(escapable, function(a) {
+                            var c = meta[a];
+                            return typeof c === 'string'? c : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+                        }) :
+                        val) +
+                    '"';
+            case '[object Number]':
+            case '[object Boolean]':
+                return '' + val;
+            case '[object Array]':
+                var res = '[', i = 0, len = val.length, strVal;
+                while(i < len) {
+                    strVal = stringify(val[i]);
+                    res += (i++? ',' : '') + (typeof strVal === 'undefined'? 'null' : strVal);
+                }
+                return res + ']';
+            case '[object Object]':
+                var res = '{', i = 0, strVal;
+                for(var key in val) {
+                    if(val.hasOwnProperty(key)) {
+                        strVal = stringify(val[key]);
+                        typeof strVal !== 'undefined' && (res += (i++? ',' : '') + '"' + key + '":' + strVal);
+                    }
+                }
+                return res + '}';
+            default:
+                return undefined;
+        }
+    }
+};
+})();
+;
+/* ../../lego/bem-bl/blocks-common/i-ecma/__json/i-ecma__json.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-bem/__dom/i-bem__dom.js: begin */ /**/
+/** @requires BEM */
+/** @requires BEM.INTERNAL */
+
+(function(BEM, $, undefined) {
+
+var win = $(window),
+    doc = $(document),
+
+/**
+ * Storage for DOM elements by unique key
+ * @private
+ * @type Object
+ */
+    uniqIdToDomElems = {},
+
+/**
+ * Storage for blocks by unique key
+ * @static
+ * @private
+ * @type Object
+ */
+    uniqIdToBlock = {},
+
+/**
+ * Storage for block parameters
+ * @private
+ * @type Object
+ */
+    domElemToParams = {},
+
+/**
+ * Storage for liveCtx event handlers 
+ * @private
+ * @type Object
+ */
+    liveEventCtxStorage = {},
+
+/**
+ * Storage for liveClass event handlers
+ * @private
+ * @type Object
+ */
+    liveClassEventStorage = {},
+
+    blocks = BEM.blocks,
+
+    INTERNAL = BEM.INTERNAL,
+
+    NAME_PATTERN = INTERNAL.NAME_PATTERN,
+
+    MOD_DELIM = INTERNAL.MOD_DELIM,
+    ELEM_DELIM = INTERNAL.ELEM_DELIM,
+
+    buildModPostfix = INTERNAL.buildModPostfix,
+    buildClass = INTERNAL.buildClass;
+
+/**
+ * Initializes blocks on a DOM element
+ * @private
+ * @param {jQuery} domElem DOM element
+ * @param {String} uniqInitId ID of the "initialization wave"
+ */
+function init(domElem, uniqInitId) {
+
+    var domNode = domElem[0];
+    $.each(getParams(domNode), function(blockName, params) {
+        processParams(params, domNode, blockName, uniqInitId);
+        var block = uniqIdToBlock[params.uniqId];
+        if(block) {
+            if(block.domElem.index(domNode) < 0) {
+                block.domElem = block.domElem.add(domElem);
+                $.extend(block._params, params);
+            }
+        } else {
+            initBlock(blockName, domElem, params);
+        }
+    });
+
+}
+
+/**
+ * Initializes a specific block on a DOM element, or returns the existing block if it was already created
+ * @private
+ * @param {String} blockName Block name
+ * @param {jQuery} domElem DOM element
+ * @param {Object} [params] Initialization parameters
+ * @param {Boolean} [forceLive] Force live initialization
+ * @param {Function} [callback] Handler to call after complete initialization
+ */
+function initBlock(blockName, domElem, params, forceLive, callback) {
+
+    if(typeof params == 'boolean') {
+        callback = forceLive;
+        forceLive = params;
+        params = undefined;
+    }
+
+    var domNode = domElem[0];
+    params = processParams(params || getParams(domNode)[blockName], domNode, blockName);
+
+    var uniqId = params.uniqId;
+    if(uniqIdToBlock[uniqId]) {
+        return uniqIdToBlock[uniqId]._init();
+    }
+
+    uniqIdToDomElems[uniqId] = uniqIdToDomElems[uniqId]?
+        uniqIdToDomElems[uniqId].add(domElem) :
+        domElem;
+
+    var parentDomNode = domNode.parentNode;
+    if(!parentDomNode || parentDomNode.nodeType === 11) { // jquery doesn't unique disconnected node
+        $.unique(uniqIdToDomElems[uniqId]);
+    }
+
+    var blockClass = blocks[blockName] || DOM.decl(blockName, {}, { live : true });
+    if(!(blockClass._liveInitable = !!blockClass._processLive()) || forceLive || params.live === false) {
+        var block = new blockClass(uniqIdToDomElems[uniqId], params, !!forceLive);
+        delete uniqIdToDomElems[uniqId];
+        callback && callback.apply(block, Array.prototype.slice.call(arguments, 4));
+        return block;
+    }
+
+}
+
+/**
+ * Processes and adds necessary block parameters
+ * @private
+ * @param {Object} params Initialization parameters
+ * @param {HTMLElement} domNode DOM node
+ * @param {String} blockName Block name
+ * @param {String} [uniqInitId] ID of the "initialization wave"
+ */
+function processParams(params, domNode, blockName, uniqInitId) {
+
+    (params || (params = {})).uniqId ||
+        (params.uniqId = (params.id? blockName + '-id-' + params.id : $.identify()) + (uniqInitId || $.identify()));
+
+    var domUniqId = $.identify(domNode),
+        domParams = domElemToParams[domUniqId] || (domElemToParams[domUniqId] = {});
+
+    domParams[blockName] || (domParams[blockName] = params);
+
+    return params;
+
+}
+
+/**
+ * Helper for searching for a DOM element using a selector inside the context, including the context itself
+ * @private
+ * @param {jQuery} ctx Context
+ * @param {String} selector CSS selector
+ * @param {Boolean} [excludeSelf=false] Exclude context from search
+ * @returns {jQuery}
+ */
+function findDomElem(ctx, selector, excludeSelf) {
+
+    var res = ctx.find(selector);
+    return excludeSelf?
+       res :
+       res.add(ctx.filter(selector));
+
+}
+
+/**
+ * Returns parameters of a block's DOM element
+ * @private
+ * @param {HTMLElement} domNode DOM node
+ * @returns {Object}
+ */
+function getParams(domNode) {
+
+    var uniqId = $.identify(domNode);
+    return domElemToParams[uniqId] ||
+           (domElemToParams[uniqId] = extractParams(domNode));
+
+}
+
+/**
+ * Retrieves block parameters from a DOM element
+ * @private
+ * @param {HTMLElement} domNode DOM node
+ * @returns {Object}
+ */
+function extractParams(domNode) {
+
+    var fn = domNode.onclick || domNode.ondblclick;
+    if(!fn && domNode.tagName.toLowerCase() == 'body') { // LEGO-2027 in FF onclick doesn't work on body
+        var elem = $(domNode),
+            attr = elem.attr('onclick') || elem.attr('ondblclick');
+        attr && (fn = Function(attr));
+    }
+    return fn? fn() : {};
+
+}
+
+/**
+ * Cleans up all the BEM storages associated with a DOM node
+ * @private
+ * @param {HTMLElement} domNode DOM node
+ */
+function cleanupDomNode(domNode) {
+
+    delete domElemToParams[$.identify(domNode)];
+
+}
+
+/**
+ * Uncople DOM node from the block. If this is the last node, then destroys the block.
+ * @private
+ * @param {BEM.DOM} block block
+ * @param {HTMLElement} domNode DOM node
+ */
+function removeDomNodeFromBlock(block, domNode) {
+
+    block.domElem.length === 1?
+        block.destruct(true) :
+        block.domElem = block.domElem.not(domNode);
+
+}
+
+/**
+ * Returns a DOM node for calculating the window size in IE
+ * @returns {HTMLElement}
+ */
+function getClientNode() {
+
+    return doc[0][$.support.boxModel? 'documentElement' : 'body'];
+
+}
+
+/**
+ * Returns a block on a DOM element and initializes it if necessary 
+ * @param {String} blockName Block name
+ * @param {Object} params Block parameters
+ * @returns {BEM}
+ */
+$.fn.bem = function(blockName, params) {
+    return initBlock(blockName, this, params, true);
+};
+
+/**
+ * @namespace
+ * @name BEM.DOM
+ */
+var DOM = BEM.DOM = BEM.decl('i-bem__dom',/** @lends BEM.DOM.prototype */{
+    /**
+     * @class Base block for creating BEM blocks that have DOM representation 
+     * @constructs
+     * @private
+     * @param {jQuery} domElem DOM element that the block is created on
+     * @param {Object} params Block parameters
+     * @param {Boolean} [initImmediately=true]
+     */
+    __constructor : function(domElem, params, initImmediately) {
+
+        var _this = this;
+
+        /**
+         * Block's DOM elements
+         * @protected
+         * @type jQuery
+         */
+        _this.domElem = domElem;
+
+        /**
+         * Cache for names of events on DOM elements
+         * @private
+         * @type Object
+         */
+        _this._eventNameCache = {};
+
+        /**
+         * Cache for elements
+         * @private
+         * @type Object
+         */
+        _this._elemCache = {};
+
+        /**
+         * Unique block ID
+         * @private
+         * @type String
+         */
+        uniqIdToBlock[_this._uniqId = params.uniqId || $.identify(_this)] = _this;
+
+        /**
+         * Flag for whether it's necessary to unbind from the document and window when destroying the block
+         * @private
+         * @type Boolean
+         */
+        _this._needSpecialUnbind = false;
+
+        _this.__base(null, params, initImmediately);
+
+    },
+
+    /**
+     * Finds blocks inside the current block or its elements (including context)
+     * @protected
+     * @param {String|jQuery} [elem] Block element
+     * @param {String|Object} block Name or description (block,modName,modVal) of the block to find
+     * @returns {BEM[]}
+     */
+    findBlocksInside : function(elem, block) {
+
+        return this._findBlocks('find', elem, block);
+
+    },
+
+    /**
+     * Finds the first block inside the current block or its elements (including context)
+     * @protected
+     * @param {String|jQuery} [elem] Block element
+     * @param {String|Object} block Name or description (block,modName,modVal) of the block to find
+     * @returns {BEM}
+     */
+    findBlockInside : function(elem, block) {
+
+        return this._findBlocks('find', elem, block, true);
+
+    },
+
+    /**
+     * Finds blocks outside the current block or its elements (including context)
+     * @protected
+     * @param {String|jQuery} [elem] Block element
+     * @param {String|Object} block Name or description (block,modName,modVal) of the block to find
+     * @returns {BEM[]}
+     */
+    findBlocksOutside : function(elem, block) {
+
+        return this._findBlocks('parents', elem, block);
+
+    },
+
+    /**
+     * Finds the first block outside the current block or its elements (including context)
+     * @protected
+     * @param {String|jQuery} [elem] Block element
+     * @param {String|Object} block Name or description (block,modName,modVal) of the block to find
+     * @returns {BEM}
+     */
+    findBlockOutside : function(elem, block) {
+
+        return this._findBlocks('closest', elem, block)[0] || null;
+
+    },
+
+    /**
+     * Finds blocks on DOM elements of the current block or its elements
+     * @protected
+     * @param {String|jQuery} [elem] Block element
+     * @param {String|Object} block Name or description (block,modName,modVal) of the block to find
+     * @returns {BEM[]}
+     */
+    findBlocksOn : function(elem, block) {
+
+        return this._findBlocks('', elem, block);
+
+    },
+
+    /**
+     * Finds the first block on DOM elements of the current block or its elements
+     * @protected
+     * @param {String|jQuery} [elem] Block element
+     * @param {String|Object} block Name or description (block,modName,modVal) of the block to find
+     * @returns {BEM}
+     */
+    findBlockOn : function(elem, block) {
+
+        return this._findBlocks('', elem, block, true);
+
+    },
+
+    _findBlocks : function(select, elem, block, onlyFirst) {
+
+        if(!block) {
+            block = elem;
+            elem = undefined;
+        }
+
+        var ctxElem = elem?
+                (typeof elem == 'string'? this.findElem(elem) : elem) :
+                this.domElem,
+            isSimpleBlock = typeof block == 'string',
+            blockName = isSimpleBlock? block : (block.block || block.blockName),
+            selector = '.' +
+                (isSimpleBlock?
+                    buildClass(blockName) :
+                    buildClass(blockName, block.modName, block.modVal)) +
+                (onlyFirst? ':first' : ''),
+            domElems = ctxElem.filter(selector);
+
+        select && (domElems = domElems.add(ctxElem[select](selector)));
+
+        if(onlyFirst) {
+            return domElems[0]? initBlock(blockName, domElems.eq(0), true) : null;
+        }
+
+        var res = [],
+            uniqIds = {};
+
+        $.each(domElems, function(i, domElem) {
+            var block = initBlock(blockName, $(domElem), true);
+            if(!uniqIds[block._uniqId]) {
+                uniqIds[block._uniqId] = true;
+                res.push(block);
+            }
+        });
+
+        return res;
+
+    },
+
+    /**
+     * Adds an event handler for any DOM element
+     * @protected
+     * @param {jQuery} domElem DOM element where the event will be listened for
+     * @param {String|Object} event Event name or event object
+     * @param {Function} fn Handler function, which will be executed in the block's context
+     * @returns {BEM}
+     */
+    bindToDomElem : function(domElem, event, fn) {
+
+        var _this = this;
+
+        fn?
+            domElem.bind(
+                _this._buildEventName(event),
+                function(e) {
+                    (e.data || (e.data = {})).domElem = $(this);
+                    return fn.apply(_this, arguments);
+                }
+            ) :
+            $.each(event, function(event, fn) {
+                _this.bindToDomElem(domElem, event, fn);
+            });
+
+        return _this;
+
+    },
+
+    /**
+     * Adds an event handler to the document
+     * @protected
+     * @param {String} event Event name
+     * @param {Function} fn Handler function, which will be executed in the block's context
+     * @returns {BEM}
+     */
+    bindToDoc : function(event, fn) {
+
+        this._needSpecialUnbind = true;
+        return this.bindToDomElem(doc, event, fn);
+
+    },
+
+    /**
+     * Adds an event handler to the window
+     * @protected
+     * @param {String} event Event name
+     * @param {Function} fn Handler function, which will be executed in the block's context
+     * @returns {BEM}
+     */
+    bindToWin : function(event, fn) {
+
+        this._needSpecialUnbind = true;
+        return this.bindToDomElem(win, event, fn);
+
+    },
+
+    /**
+     * Adds an event handler to the block's main DOM elements or its nested elements
+     * @protected
+     * @param {jQuery|String} [elem] Element
+     * @param {String} event Event name
+     * @param {Function} fn Handler function, which will be executed in the block's context
+     * @returns {BEM}
+     */
+    bindTo : function(elem, event, fn) {
+
+        if(!event || $.isFunction(event)) { // if there is no element
+            fn = event;
+            event = elem;
+            elem = this.domElem;
+        } else if(typeof elem == 'string') {
+            elem = this.elem(elem);
+        }
+
+        return this.bindToDomElem(elem, event, fn);
+
+    },
+
+    /**
+     * Removes event handlers from any DOM element
+     * @protected
+     * @param {jQuery} domElem DOM element where the event was being listened for
+     * @param {String} event Event name
+     * @returns {BEM}
+     */
+    unbindFromDomElem : function(domElem, event) {
+
+        domElem.unbind(this._buildEventName(event));
+        return this;
+
+    },
+
+    /**
+     * Removes event handler from document
+     * @protected
+     * @param {String} event Event name
+     * @returns {BEM}
+     */
+    unbindFromDoc : function(event) {
+
+        return this.unbindFromDomElem(doc, event);
+
+    },
+
+    /**
+     * Removes event handler from window
+     * @protected
+     * @param {String} event Event name
+     * @returns {BEM}
+     */
+    unbindFromWin : function(event) {
+
+        return this.unbindFromDomElem(win, event);
+
+    },
+
+    /**
+     * Removes event handlers from the block's main DOM elements or its nested elements
+     * @protected
+     * @param {jQuery|String} [elem] Nested element
+     * @param {String} event Event name
+     * @returns {BEM}
+     */
+    unbindFrom : function(elem, event) {
+
+        if(!event) {
+            event = elem;
+            elem = this.domElem;
+        } else if(typeof elem == 'string') {
+            elem = this.elem(elem);
+        }
+
+        return this.unbindFromDomElem(elem, event);
+
+    },
+
+    /**
+     * Builds a full name for an event
+     * @private
+     * @param {String} event Event name
+     * @returns {String}
+     */
+    _buildEventName : function(event) {
+
+        var _this = this;
+        return event.indexOf(' ') > 1?
+            event.split(' ').map(function(e) {
+                return _this._buildOneEventName(e);
+            }).join(' ') :
+            _this._buildOneEventName(event);
+
+    },
+
+    /**
+     * Builds a full name for a single event
+     * @private
+     * @param {String} event Event name
+     * @returns {String}
+     */
+    _buildOneEventName : function(event) {
+
+        var _this = this,
+            eventNameCache = _this._eventNameCache;
+
+        if(event in eventNameCache) return eventNameCache[event];
+
+        var uniq = '.' + _this._uniqId;
+
+        if(event.indexOf('.') < 0) return eventNameCache[event] = event + uniq;
+
+        var lego = '.bem_' + _this.__self._name;
+
+        return eventNameCache[event] = event.split('.').map(function(e, i) {
+            return i == 0? e + lego : lego + '_' + e;
+        }).join('') + uniq;
+
+    },
+
+    /**
+     * Triggers block event handlers and live event handlers
+     * @protected
+     * @param {String} e Event name
+     * @param {Object} [data] Additional information
+     * @returns {BEM}
+     */
+    trigger : function(e, data) {
+
+        this
+            .__base(e = this.buildEvent(e), data)
+            .domElem && this._ctxTrigger(e, data);
+
+        return this;
+
+    },
+
+    _ctxTrigger : function(e, data) {
+
+        var _this = this,
+            storage = liveEventCtxStorage[_this.__self._buildCtxEventName(e.type)],
+            ctxIds = {};
+
+        storage && _this.domElem.each(function() {
+            var ctx = this,
+                counter = storage.counter;
+            while(ctx && counter) {
+                var ctxId = $.identify(ctx, true);
+                if(ctxId) {
+                    if(ctxIds[ctxId]) break;
+                    var storageCtx = storage.ctxs[ctxId];
+                    if(storageCtx) {
+                        $.each(storageCtx, function(uniqId, handler) {
+                            handler.fn.call(
+                                handler.ctx || _this,
+                                e,
+                                data);
+                        });
+                        counter--;
+                    }
+                    ctxIds[ctxId] = true;
+                }
+                ctx = ctx.parentNode;
+            }
+        });
+
+    },
+
+    /**
+     * Sets a modifier for a block/nested element
+     * @protected
+     * @param {jQuery} [elem] Nested element
+     * @param {String} modName Modifier name
+     * @param {String} modVal Modifier value
+     * @returns {BEM}
+     */
+    setMod : function(elem, modName, modVal) {
+
+        if(elem && typeof modVal != 'undefined' && elem.length > 1) {
+            var _this = this;
+            elem.each(function() {
+                var item = $(this);
+                item.__bemElemName = elem.__bemElemName;
+                _this.setMod(item, modName, modVal);
+            });
+            return _this;
+        }
+        return this.__base(elem, modName, modVal);
+
+    },
+
+    /**
+     * Retrieves modifier value from the DOM node's CSS class
+     * @private
+     * @param {String} modName Modifier name
+     * @param {jQuery} [elem] Nested element
+     * @param {String} [elemName] Name of the nested element
+     * @returns {String} Modifier value
+     */
+    _extractModVal : function(modName, elem, elemName) {
+
+        var domNode = (elem || this.domElem)[0],
+            matches;
+
+        domNode &&
+            (matches = domNode.className
+                .match(this.__self._buildModValRE(modName, elemName || elem)));
+
+        return matches? matches[2] : '';
+
+    },
+
+    /**
+     * Retrieves a name/value list of modifiers
+     * @private
+     * @param {Array} [modNames] Names of modifiers
+     * @param {Object} [elem] Element
+     * @returns {Object} Hash of modifier values by names
+     */
+    _extractMods : function(modNames, elem) {
+
+        var res = {},
+            extractAll = !modNames.length,
+            countMatched = 0;
+
+        ((elem || this.domElem)[0].className
+            .match(this.__self._buildModValRE(
+                '(' + (extractAll? NAME_PATTERN : modNames.join('|')) + ')',
+                elem,
+                'g')) || []).forEach(function(className) {
+                    var iModVal = (className = className.trim()).lastIndexOf(MOD_DELIM),
+                        iModName = className.substr(0, iModVal - 1).lastIndexOf(MOD_DELIM);
+                    res[className.substr(iModName + 1, iModVal - iModName - 1)] = className.substr(iModVal + 1);
+                    ++countMatched;
+                });
+
+        // empty modifier values are not reflected in classes; they must be filled with empty values
+        countMatched < modNames.length && modNames.forEach(function(modName) {
+            modName in res || (res[modName] = '');
+        });
+
+        return res;
+
+    },
+
+    /**
+     * Sets a modifier's CSS class for a block's DOM element or nested element
+     * @private
+     * @param {String} modName Modifier name
+     * @param {String} modVal Modifier value
+     * @param {String} oldModVal Old modifier value
+     * @param {jQuery} [elem] Element
+     * @param {String} [elemName] Element name
+     */
+    _afterSetMod : function(modName, modVal, oldModVal, elem, elemName) {
+
+        var _self = this.__self,
+            classPrefix = _self._buildModClassPrefix(modName, elemName),
+            classRE = _self._buildModValRE(modName, elemName),
+            needDel = modVal === '';
+
+        (elem || this.domElem).each(function() {
+            var className = this.className;
+            className.indexOf(classPrefix) > -1?
+                this.className = className.replace(
+                    classRE,
+                    (needDel? '' : '$1' + classPrefix + modVal) + '$3') :
+                needDel || $(this).addClass(classPrefix + modVal);
+        });
+
+        elemName && this
+            .dropElemCache(elemName, modName, oldModVal)
+            .dropElemCache(elemName, modName, modVal);
+
+    },
+
+    /**
+     * Finds elements nested in a block
+     * @protected
+     * @param {String|jQuery} [ctx=this.domElem] Element where search is being performed
+     * @param {String} names Nested element name (or names separated by spaces)
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {jQuery} DOM elements
+     */
+    findElem : function(ctx, names, modName, modVal) {
+
+        if(arguments.length % 2) { // if the number of arguments is one or three
+            modVal = modName;
+            modName = names;
+            names = ctx;
+            ctx = this.domElem;
+        } else if(typeof ctx == 'string') {
+            ctx = this.findElem(ctx);
+        }
+
+        var _self = this.__self,
+            selector = '.' +
+                names.split(' ').map(function(name) {
+                    return buildClass(_self._name, name, modName, modVal);
+                }).join(',.');
+        return findDomElem(ctx, selector);
+
+    },
+
+    /**
+     * Finds elements nested in a block
+     * @protected
+     * @param {String} name Nested element name
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {jQuery} DOM elements
+     */
+    _elem : function(name, modName, modVal) {
+
+        var key = name + buildModPostfix(modName, modVal),
+            res;
+
+        if(!(res = this._elemCache[key])) {
+            res = this._elemCache[key] = this.findElem(name, modName, modVal);
+            res.__bemElemName = name;
+        }
+
+        return res;
+
+    },
+
+    /**
+     * Lazy search for elements nested in a block (caches results)
+     * @protected
+     * @param {String} names Nested element name (or names separated by spaces)
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {jQuery} DOM elements
+     */
+    elem : function(names, modName, modVal) {
+
+        if(modName && typeof modName != 'string') {
+            modName.__bemElemName = names;
+            return modName;
+        }
+
+        if(names.indexOf(' ') < 0) {
+            return this._elem(names, modName, modVal);
+        }
+
+        var res = $([]),
+            _this = this;
+        names.split(' ').forEach(function(name) {
+            res = res.add(_this._elem(name, modName, modVal));
+        });
+        return res;
+
+    },
+
+    /**
+     * Clearing the cache for elements
+     * @protected
+     * @param {String} names Nested element name (or names separated by spaces)
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {BEM}
+     */
+    dropElemCache : function(names, modName, modVal) {
+
+        if(names) {
+            var _this = this,
+                modPostfix = buildModPostfix(modName, modVal);
+            names.indexOf(' ') < 0?
+                delete _this._elemCache[names + modPostfix] :
+                names.split(' ').forEach(function(name) {
+                    delete _this._elemCache[name + modPostfix];
+                });
+        } else {
+            this._elemCache = {};
+        }
+
+        return this;
+
+    },
+
+    /**
+     * Retrieves parameters of a block element
+     * @param {String|jQuery} elem Element
+     * @returns {Object} Parameters
+     */
+    elemParams : function(elem) {
+
+        var elemName;
+        if(typeof elem ==  'string') {
+            elemName = elem;
+            elem = this.elem(elem);
+        } else {
+            elemName = this.__self._extractElemNameFrom(elem);
+        }
+
+        return extractParams(elem[0])[buildClass(this.__self.getName(), elemName)] || {};
+
+    },
+
+    /**
+     * Checks whether a DOM element is in a block
+     * @protected
+     * @param {jQuery} domElem DOM element
+     * @returns {Boolean}
+     */
+    containsDomElem : function(domElem) {
+
+        var res = false;
+
+        this.domElem.each(function() {
+            return !(res = domElem.parents().andSelf().index(this) > -1);
+        });
+
+        return res;
+
+    },
+
+    /**
+     * Builds a CSS selector corresponding to a block/element and modifier
+     * @param {String} [elem] Element name
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {String}
+     */
+    buildSelector : function(elem, modName, modVal) {
+
+        return this.__self.buildSelector(elem, modName, modVal);
+
+    },
+
+    /**
+     * Deletes a block
+     * @param {Boolean} [keepDOM=false] Whether to keep the block's DOM nodes in the document
+     */
+    destruct : function(keepDOM) {
+
+        var _this = this,
+            _self = _this.__self;
+
+        _this._isDestructing = true;
+
+        _this._needSpecialUnbind && _self.doc.add(_self.win).unbind('.' + _this._uniqId);
+
+        _this.dropElemCache().domElem.each(function(i, domNode) {
+            var params = getParams(domNode);
+            $.each(params, function(blockName, blockParams) {
+                var block = uniqIdToBlock[blockParams.uniqId];
+                if(block) {
+                    if(!block._isDestructing) {
+                        removeDomNodeFromBlock(block, domNode);
+                        delete params[blockName];
+                    }
+                }
+                else {
+                    delete uniqIdToDomElems[blockParams.uniqId];
+                }
+            });
+            $.isEmptyObject(params) && cleanupDomNode(domNode);
+        });
+
+        keepDOM || _this.domElem.remove();
+
+        delete uniqIdToBlock[_this.un()._uniqId];
+        delete _this.domElem;
+        delete _this._elemCache;
+
+        _this.__base();
+
+    }
+
+}, /** @lends BEM.DOM */{
+
+    /**
+     * Document shortcut
+     * @protected
+     * @type jQuery
+     */
+    doc : doc,
+
+    /**
+     * Window shortcut
+     * @protected
+     * @type jQuery
+     */
+    win : win,
+
+    /**
+     * Processes a block's live properties
+     * @private
+     * @param {Boolean} [heedLive=false] Whether to take into account that the block already processed its live properties
+     * @returns {Boolean} Whether the block is a live block
+     */
+    _processLive : function(heedLive) {
+
+        var _this = this,
+            res = _this._liveInitable;
+
+        if('live' in _this) {
+            var noLive = typeof res == 'undefined';
+
+            if(noLive ^ heedLive) {
+                if($.isFunction(_this.live)) {
+                    res = _this.live() !== false;
+                    _this.live = function() {};
+                } else {
+                    res = _this.live;
+                }
+            }
+        }
+
+        return res;
+
+    },
+
+    /**
+     * Initializes blocks on a fragment of the DOM tree
+     * @static
+     * @protected
+     * @param {jQuery} [ctx=document] Root DOM node
+     * @returns {jQuery} ctx Initialization context
+     */
+    init : function(ctx, callback, callbackCtx) {
+
+        if(!ctx || $.isFunction(ctx)) {
+            callbackCtx = callback;
+            callback = ctx;
+            ctx = doc;
+        }
+
+        var uniqInitId = $.identify();
+        findDomElem(ctx, '.i-bem').each(function() {
+            init($(this), uniqInitId);
+        });
+
+        callback && this.afterCurrentEvent(
+            function() {
+                callback.call(callbackCtx || this, ctx);
+            });
+
+        // makes initialization completely synchronous
+        this._runAfterCurrentEventFns();
+
+        return ctx;
+
+    },
+
+    /**
+     * Destroys blocks on a fragment of the DOM tree
+     * @static
+     * @protected
+     * @param {Boolean} [keepDOM=false] Whether to keep DOM nodes in the document
+     * @param {jQuery} ctx Root DOM node
+     * @param {Boolean} [excludeSelf=false] Exclude the context
+     */
+    destruct : function(keepDOM, ctx, excludeSelf) {
+
+        if(typeof keepDOM != 'boolean') {
+            excludeSelf = ctx;
+            ctx = keepDOM;
+            keepDOM = undefined;
+        }
+
+        findDomElem(ctx, '.i-bem', excludeSelf).each(function(i, domNode) {
+            var params = getParams(this);
+            $.each(params, function(blockName, blockParams) {
+                if(blockParams.uniqId) {
+                    var block = uniqIdToBlock[blockParams.uniqId];
+                    if(block) {
+                        removeDomNodeFromBlock(block, domNode);
+                        delete params[blockName];
+                    }
+                    else {
+                        delete uniqIdToDomElems[blockParams.uniqId];
+                    }
+                }
+            });
+            $.isEmptyObject(params) && cleanupDomNode(this);
+        });
+        keepDOM || (excludeSelf? ctx.empty() : ctx.remove());
+
+    },
+
+    /**
+     * Replaces a fragment of the DOM tree inside the context, destroying old blocks and intializing new ones
+     * @static
+     * @protected
+     * @param {jQuery} ctx Root DOM node
+     * @param {jQuery|String} content New content
+     * @param {Function} [callback] Handler to be called after initialization
+     * @param {Object} [callbackCtx] Handler's context
+     */
+    update : function(ctx, content, callback, callbackCtx) {
+
+        this.destruct(ctx, true);
+        this.init(ctx.html(content), callback, callbackCtx);
+
+    },
+
+    /**
+     * Adds a fragment of the DOM tree at the end of the context and initializes blocks
+     * @param {jQuery} ctx Root DOM node
+     * @param {jQuery|String} content Content to be added
+     */
+    append : function(ctx, content) {
+
+        this.init($(content).appendTo(ctx));
+
+    },
+
+    /**
+     * Adds a fragment of the DOM tree at the beginning of the context and initializes blocks
+     * @param {jQuery} ctx Root DOM node
+     * @param {jQuery|String} content Content to be added
+     */
+    prepend : function(ctx, content) {
+
+        this.init($(content).prependTo(ctx));
+
+    },
+
+    /**
+     * Adds a fragment of the DOM tree before the context and initializes blocks
+     * @param {jQuery} ctx Contextual DOM node
+     * @param {jQuery|String} content Content to be added
+     */
+    before : function(ctx, content) {
+
+        this.init($(content).insertBefore(ctx));
+
+    },
+
+    /**
+     * Adds a fragment of the DOM tree after the context and initializes blocks
+     * @param {jQuery} ctx Contextual DOM node
+     * @param {jQuery|String} content Content to be added
+     */
+    after : function(ctx, content) {
+
+        this.init($(content).insertAfter(ctx));
+
+    },
+
+    /**
+     * Builds a full name for a live event
+     * @static
+     * @private
+     * @param {String} e Event name
+     * @returns {String}
+     */
+    _buildCtxEventName : function(e) {
+
+        return this._name + ':' + e;
+
+    },
+
+    _liveClassBind : function(className, e, callback, invokeOnInit) {
+
+        var _this = this;
+        if(e.indexOf(' ') > -1) {
+            e.split(' ').forEach(function(e) {
+                _this._liveClassBind(className, e, callback, invokeOnInit);
+            });
+        }
+        else {
+            var storage = liveClassEventStorage[e],
+                uniqId = $.identify(callback);
+
+            if(!storage) {
+                storage = liveClassEventStorage[e] = {};
+                doc.bind(e, _this.changeThis(_this._liveClassTrigger, _this));
+            }
+
+            storage = storage[className] || (storage[className] = { uniqIds : {}, fns : [] });
+
+            if(!(uniqId in storage.uniqIds)) {
+                storage.fns.push({ uniqId : uniqId, fn : _this._buildLiveEventFn(callback, invokeOnInit) });
+                storage.uniqIds[uniqId] = storage.fns.length - 1;
+            }
+        }
+
+        return this;
+
+    },
+
+    _liveClassUnbind : function(className, e, callback) {
+
+        var storage = liveClassEventStorage[e];
+        if(storage) {
+            if(callback) {
+                if(storage = storage[className]) {
+                    var uniqId = $.identify(callback);
+                    if(uniqId in storage.uniqIds) {
+                        var i = storage.uniqIds[uniqId],
+                            len = storage.fns.length - 1;
+                        storage.fns.splice(i, 1);
+                        while(i < len) storage.uniqIds[storage.fns[i++].uniqId] = i - 1;
+                        delete storage.uniqIds[uniqId];
+                    }
+                }
+            } else {
+                delete storage[className];
+            }
+        }
+
+        return this;
+
+    },
+
+    _liveClassTrigger : function(e) {
+
+        var storage = liveClassEventStorage[e.type];
+        if(storage) {
+            var node = e.target, classNames = [];
+            for(var className in storage) storage.hasOwnProperty(className) && classNames.push(className);
+            do {
+                var nodeClassName = ' ' + node.className + ' ', i = 0;
+                while(className = classNames[i++]) {
+                    if(nodeClassName.indexOf(' ' + className + ' ') > -1) {
+                        var j = 0, fns = storage[className].fns, fn;
+                        while(fn = fns[j++]) fn.fn.call($(node), e);
+                        if(e.isPropagationStopped()) return;
+                        classNames.splice(--i, 1);
+                    }
+                }
+            } while(classNames.length && (node = node.parentNode));
+        }
+
+    },
+
+    _buildLiveEventFn : function(callback, invokeOnInit) {
+
+        var _this = this;
+        return function(e) {
+            var args = [
+                    _this._name,
+                    ((e.data || (e.data = {})).domElem = $(this)).closest(_this.buildSelector()),
+                    true ],
+                block = initBlock.apply(null, invokeOnInit? args.concat([callback, e]) : args);
+            block && (invokeOnInit || (callback && callback.apply(block, arguments)));
+        };
+
+    },
+
+    /**
+     * Helper for live initialization for an event on DOM elements of a block or its elements
+     * @static
+     * @protected
+     * @param {String} [elemName] Element name or names (separated by spaces)
+     * @param {String} event Event name
+     * @param {Function} [callback] Handler to call after successful initialization
+     */
+    liveInitOnEvent : function(elemName, event, callback) {
+
+        return this.liveBindTo(elemName, event, callback, true);
+
+    },
+
+    /**
+     * Helper for subscribing to live events on DOM elements of a block or its elements
+     * @static
+     * @protected
+     * @param {String|Object} [to] Description (object with modName, modVal, elem) or name of the element or elements (space-separated)
+     * @param {String} event Event name
+     * @param {Function} [callback] Handler
+     */
+    liveBindTo : function(to, event, callback, invokeOnInit) {
+
+        if(!event || $.isFunction(event)) {
+            callback = event;
+            event = to;
+            to = undefined;
+        }
+
+        if(!to || typeof to == 'string') {
+            to = { elem : to };
+        }
+
+        to.elemName && (to.elem = to.elemName);
+
+        var _this = this;
+
+        if(to.elem && to.elem.indexOf(' ') > 1) {
+            to.elem.split(' ').forEach(function(elem) {
+                _this._liveClassBind(
+                    buildClass(_this._name, elem, to.modName, to.modVal),
+                    event,
+                    callback,
+                    invokeOnInit);
+            });
+            return _this;
+        }
+
+        return _this._liveClassBind(
+            buildClass(_this._name, to.elem, to.modName, to.modVal),
+            event,
+            callback,
+            invokeOnInit);
+
+    },
+
+    /**
+     * Helper for unsubscribing from live events on DOM elements of a block or its elements
+     * @static
+     * @protected
+     * @param {String} [elem] Name of the element or elements (space-separated)
+     * @param {String} event Event name
+     * @param {Function} [callback] Handler
+     */
+    liveUnbindFrom : function(elem, event, callback) {
+
+        var _this = this;
+
+        if(elem.indexOf(' ') > 1) {
+            elem.split(' ').forEach(function(elem) {
+                _this._liveClassUnbind(
+                    buildClass(_this._name, elem),
+                    event,
+                    callback);
+            });
+            return _this;
+        }
+
+        return _this._liveClassUnbind(
+            buildClass(_this._name, elem),
+            event,
+            callback);
+
+    },
+
+    /**
+     * Helper for live initialization when a different block is initialized
+     * @static
+     * @private
+     * @param {String} event Event name
+     * @param {String} blockName Name of the block that should trigger a reaction when initialized
+     * @param {Function} callback Handler to be called after successful initialization in the new block's context
+     * @param {String} findFnName Name of the method for searching
+     */
+    _liveInitOnBlockEvent : function(event, blockName, callback, findFnName) {
+
+        var name = this._name;
+        blocks[blockName].on(event, function(e) {
+            var args = arguments,
+                blocks = e.block[findFnName](name);
+
+            callback && blocks.forEach(function(block) {
+                callback.apply(block, args);
+            });
+        });
+        return this;
+
+    },
+
+    /**
+     * Helper for live initialization for a different block's event on the current block's DOM element
+     * @static
+     * @protected
+     * @param {String} event Event name
+     * @param {String} blockName Name of the block that should trigger a reaction when initialized
+     * @param {Function} callback Handler to be called after successful initialization in the new block's context
+     */
+    liveInitOnBlockEvent : function(event, blockName, callback) {
+
+        return this._liveInitOnBlockEvent(event, blockName, callback, 'findBlocksOn');
+
+    },
+
+    /**
+     * Helper for live initialization for a different block's event inside the current block
+     * @static
+     * @protected
+     * @param {String} event Event name
+     * @param {String} blockName Name of the block that should trigger a reaction when initialized
+     * @param {Function} [callback] Handler to be called after successful initialization in the new block's context
+     */
+    liveInitOnBlockInsideEvent : function(event, blockName, callback) {
+
+        return this._liveInitOnBlockEvent(event, blockName, callback, 'findBlocksOutside');
+
+    },
+
+    /**
+     * Helper for live initialization when a different block is initialized on a DOM element of the current block
+     * @deprecated - use liveInitOnBlockEvent
+     * @static
+     * @protected
+     * @param {String} blockName Name of the block that should trigger a reaction when initialized
+     * @param {Function} callback Handler to be called after successful initialization in the new block's context
+     */
+    liveInitOnBlockInit : function(blockName, callback) {
+
+        return this.liveInitOnBlockEvent('init', blockName, callback);
+
+    },
+
+    /**
+     * Helper for live initialization when a different block is initialized inside the current block
+     * @deprecated - use liveInitOnBlockInsideEvent
+     * @static
+     * @protected
+     * @param {String} blockName Name of the block that should trigger a reaction when initialized
+     * @param {Function} [callback] Handler to be called after successful initialization in the new block's context
+     */
+    liveInitOnBlockInsideInit : function(blockName, callback) {
+
+        return this.liveInitOnBlockInsideEvent('init', blockName, callback);
+
+    },
+
+    /**
+     * Adds a live event handler to a block, based on a specified element where the event will be listened for
+     * @static
+     * @protected
+     * @param {jQuery} [ctx] The element in which the event will be listened for
+     * @param {String} e Event name
+     * @param {Object} [data] Additional information that the handler gets as e.data
+     * @param {Function} fn Handler
+     * @param {Object} [fnCtx] Handler's context
+     */
+    on : function(ctx, e, data, fn, fnCtx) {
+
+        return ctx.jquery?
+            this._liveCtxBind(ctx, e, data, fn, fnCtx) :
+            this.__base(ctx, e, data, fn);
+
+    },
+
+    /**
+     * Removes the live event handler from a block, based on a specified element where the event was being listened for 
+     * @static
+     * @protected
+     * @param {jQuery} [ctx] The element in which the event was being listened for
+     * @param {String} e Event name
+     * @param {Function} [fn] Handler
+     * @param {Object} [fnCtx] Handler context
+     */
+    un : function(ctx, e, fn, fnCtx) {
+
+        return ctx.jquery?
+            this._liveCtxUnbind(ctx, e, fn, fnCtx) :
+            this.__base(ctx, e, fn);
+
+    },
+
+    /**
+     * Adds a live event handler to a block, based on a specified element where the event will be listened for
+     * @deprecated Use on
+     * @static
+     * @protected
+     * @param {jQuery} ctx The element in which the event will be listened for
+     * @param {String} e Event name
+     * @param {Object} [data] Additional information that the handler gets as e.data
+     * @param {Function} fn Handler
+     * @param {Object} [fnCtx] Handler context
+     */
+    liveCtxBind : function(ctx, e, data, fn, fnCtx) {
+
+        return this._liveCtxBind(ctx, e, data, fn, fnCtx);
+
+    },
+
+    /**
+     * Adds a live event handler to a block, based on a specified element where the event will be listened for
+     * @static
+     * @private
+     * @param {jQuery} ctx The element in which the event will be listened for
+     * @param {String} e  Event name
+     * @param {Object} [data] Additional information that the handler gets as e.data
+     * @param {Function} fn Handler
+     * @param {Object} [fnCtx] Handler context
+     */
+    _liveCtxBind : function(ctx, e, data, fn, fnCtx) {
+
+        var _this = this;
+
+        if(typeof e == 'string') {
+            if($.isFunction(data)) {
+                fnCtx = fn;
+                fn = data;
+                data = undefined;
+            }
+
+            if(e.indexOf(' ') > -1) {
+                e.split(' ').forEach(function(e) {
+                    _this._liveCtxBind(ctx, e, data, fn, fnCtx);
+                });
+            } else {
+                var ctxE = _this._buildCtxEventName(e),
+                    storage = liveEventCtxStorage[ctxE] ||
+                        (liveEventCtxStorage[ctxE] = { counter : 0, ctxs : {} });
+
+                ctx.each(function() {
+                    var ctxId = $.identify(this),
+                        ctxStorage = storage.ctxs[ctxId];
+                    if(!ctxStorage) {
+                        ctxStorage = storage.ctxs[ctxId] = {};
+                        ++storage.counter;
+                    }
+                    ctxStorage[$.identify(fn) + (fnCtx? $.identify(fnCtx) : '')] = {
+                        fn   : fn,
+                        data : data,
+                        ctx  : fnCtx
+                    };
+                });
+            }
+        } else {
+            $.each(e, function(e, fn) {
+                _this._liveCtxBind(ctx, e, fn, data);
+            });
+        }
+
+        return _this;
+
+    },
+
+    /**
+     * Removes a live event handler from a block, based on a specified element where the event was being listened for
+     * @deprecated Use on
+     * @static
+     * @protected
+     * @param {jQuery} ctx The element in which the event was being listened for
+     * @param {String} e Event name
+     * @param {Function} [fn] Handler
+     * @param {Object} [fnCtx] Handler context
+     */
+    liveCtxUnbind : function(ctx, e, fn, fnCtx) {
+
+        return this._liveCtxUnbind(ctx, e, fn, fnCtx);
+
+    },
+
+    /**
+     * Removes a live event handler from a block, based on a specified element where the event was being listened for
+     * @static
+     * @private
+     * @param {jQuery} ctx The element in which the event was being listened for
+     * @param {String} e Event name
+     * @param {Function} [fn] Handler
+     * @param {Object} [fnCtx] Handler context
+     */
+    _liveCtxUnbind : function(ctx, e, fn, fnCtx) {
+
+        var _this = this,
+            storage = liveEventCtxStorage[e =_this._buildCtxEventName(e)];
+
+        if(storage) {
+            ctx.each(function() {
+                var ctxId = $.identify(this, true),
+                    ctxStorage;
+                if(ctxId && (ctxStorage = storage.ctxs[ctxId])) {
+                    fn && delete ctxStorage[$.identify(fn) + (fnCtx? $.identify(fnCtx) : '')];
+                    if(!fn || $.isEmptyObject(ctxStorage)) {
+                        storage.counter--;
+                        delete storage.ctxs[ctxId];
+                    }
+                }
+            });
+            storage.counter || delete liveEventCtxStorage[e];
+        }
+
+        return _this;
+
+    },
+
+    /**
+     * Retrieves the name of an element nested in a block
+     * @static
+     * @private
+     * @param {jQuery} elem Nested element
+     * @returns {String|undefined}
+     */
+    _extractElemNameFrom : function(elem) {
+
+        if(elem.__bemElemName) return elem.__bemElemName;
+
+        var matches = elem[0].className.match(this._buildElemNameRE());
+        return matches? matches[1] : undefined;
+
+    },
+
+    /**
+     * Retrieves block parameters from a DOM element
+     * @static
+     * @param {HTMLElement} domNode DOM node
+     * @returns {Object}
+     */
+    extractParams : extractParams,
+
+    /**
+     * Builds a prefix for the CSS class of a DOM element or nested element of the block, based on modifier name
+     * @static
+     * @private
+     * @param {String} modName Modifier name
+     * @param {jQuery|String} [elem] Element
+     * @returns {String}
+     */
+    _buildModClassPrefix : function(modName, elem) {
+
+        return buildClass(this._name) +
+               (elem?
+                   ELEM_DELIM + (typeof elem === 'string'? elem : this._extractElemNameFrom(elem)) :
+                   '') +
+               MOD_DELIM + modName + MOD_DELIM;
+
+    },
+
+    /**
+     * Builds a regular expression for extracting modifier values from a DOM element or nested element of a block
+     * @static
+     * @private
+     * @param {String} modName Modifier name
+     * @param {jQuery|String} [elem] Element
+     * @param {String} [quantifiers] Regular expression quantifiers
+     * @returns {RegExp}
+     */
+    _buildModValRE : function(modName, elem, quantifiers) {
+
+        return new RegExp('(\\s?)' + this._buildModClassPrefix(modName, elem) + '(' + NAME_PATTERN + ')(\\s|$)', quantifiers);
+
+    },
+
+    /**
+     * Builds a regular expression for extracting names of elements nested in a block
+     * @static
+     * @private
+     * @returns {RegExp}
+     */
+    _buildElemNameRE : function() {
+
+        return new RegExp(this._name + ELEM_DELIM + '(' + NAME_PATTERN + ')(?:\\s|$)');
+
+    },
+
+    /**
+     * Builds a CSS selector corresponding to the block/element and modifier
+     * @param {String} [elem] Element name
+     * @param {String} [modName] Modifier name
+     * @param {String} [modVal] Modifier value
+     * @returns {String}
+     */
+    buildSelector : function(elem, modName, modVal) {
+
+        return '.' + buildClass(this._name, elem, modName, modVal);
+
+    },
+
+    /**
+     * Returns a block instance by unique ID
+     * @deprecated
+     * @param {String} [uniqId]
+     * @returns {BEM.DOM}
+     */
+    getBlockByUniqId : function(uniqId) {
+
+        return uniqIdToBlock[uniqId];
+
+    },
+
+    /**
+     * Returns the size of the current window
+     * @returns {Object} Object with width and height fields
+     */
+    getWindowSize : function() {
+
+        return {
+            width  : win.width(),
+            height : win.height()
+        };
+
+    }
+
+});
+
+})(BEM, jQuery);
+;
+/* ../../lego/bem-bl/blocks-common/i-bem/__dom/i-bem__dom.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-ecma/__string/i-ecma__string.js: begin */ /**/
+(function() {
+
+String.prototype.trim || (String.prototype.trim = function () {
+
+    var str = this.replace(/^\s\s*/, ''),
+        ws = /\s/,
+        i = str.length;
+
+    while(ws.test(str.charAt(--i)));
+
+    return str.slice(0, i + 1);
+
+});
+
+})();;
+/* ../../lego/bem-bl/blocks-common/i-ecma/__string/i-ecma__string.js: end */ /**/
+
+/* ../../lego/blocks-common/i-common/check-session/i-common__check-session.js: begin */ /**/
+(function(Lego){
+if (!Lego) Lego = window.Lego = {};
+/**
+ * Проверяет жива ли сессия пользователя (наличие куки yandex_login).
+ *
+ * @return  true, если сессия пользователя живая.
+ */
+Lego.isSessionValid = function() {
+    return !!Lego.getCookie('yandex_login');
+}
+})(window.Lego);
+;
+/* ../../lego/blocks-common/i-common/check-session/i-common__check-session.js: end */ /**/
+
+/* ../../lego/blocks-common/i-global/i-global.js: begin */ /**/
+
+BEM.DOM.decl('i-global', {
+
+    onSetMod : {
+
+        'js' : function() {
+
+            // удаляем системные свойства
+            this.del(this.__self._params = $.extend({}, this.params), 'uniqId', 'name');
+
+            var params = this.__self._params;
+
+            params['passport-msg'] || (params['passport-msg'] = params.id);
+
+            if(params['show-counters'] === undefined) {
+                params['show-counters'] = Math.round(Math.random() * 100) <= params['show-counters-percent'];
+            }
+            params.locale = params.lang;
+
+            $(function(){
+                params.oframebust && Lego.oframebust(params.oframebust);
+            });
+
+        }
+
+    },
+
+    getDefaultParams : function() {
+
+        return {
+            id : '',
+            login : Lego.isSessionValid() ? $.cookie('yandex_login') || '' : '',
+            yandexuid : $.cookie('yandexuid'),
+            lang : 'ru',
+            retpath : window.location.toString(),
+            'passport-host' : 'https://passport.yandex.ru',
+            'pass-host' : '//pass.yandex.ru',
+            'social-host' : '//social.yandex.ru',
+            'lego-path' : '/lego',
+            'show-counters-percent' : 100
+        };
+
+    }
+
+}, {
+
+    param  : function(name) {
+
+        return (this._params || {})[name];
+
+    }
+
+});
+;
+/* ../../lego/blocks-common/i-global/i-global.js: end */ /**/
+
+/* ../../lego/blocks-common/i-counter/i-counter.js: begin */ /**/
+(function(Lego){
+if (!Lego) Lego = window.Lego = {};
+
+!Lego.params && (Lego.params = {});
+
+
+/**
+ * Хелпер удаляющий протокол из переданного хоста, для приведения
+ * к каноническому виду.
+ *
+ * @param h {String}
+ * @returns {String}
+ */
+function preparseHost(h) {
+    return h.replace(/^(?:https?:)?\/\//, '');
+}
+
+/**
+ * Счётчик клика на ссылку или просто показа.
+ *
+ * В случае клика подменяет href на redir'овский, потом по таймауту возвращает его обратно.
+ *
+ * В случае учёта показа динамически создаёт скрипт с URL системы учёта.
+ *
+ * Пример использования:
+ *
+ * <a href="http://meteoinfo.ru" onmousedown="Lego.c('stred/pid=7/cid=433',this)">Гидрометцентр</a>
+ *
+ * или
+ *
+ * < script type="text/javascript">Lego.c('stred/pid=7/cid=433')< /script>
+ *
+ * @param w     параметры счётчика
+ * @param a     (optional) ссылка, клик на которую надо учитывать
+ * @param opts  (optional) opts.noRedirect = true обрабатывает клик по обычной ссылке, как по b-link_pseudo_yes
+ */ /**/
+Lego.c = function(w, a, opts) {
+/*
+    new Image().src = location.protocol + '//clck.yandex.ru/click/dtype=' + w +
+        '/rnd=' + ((new Date()).getTime() + Math.round(Math.random()*100)) +
+        '/*' + (a ? (a.href || location.href) : '');
+*/
+
+    var host = preparseHost((opts && opts.host) || BEM.blocks['i-global'].param('click-host') || 'clck.yandex.ru'),
+        url = function(w, h, t, a) {
+
+            h = h.replace("'", "%27"); //см. LEGO-6428
+
+            return h.indexOf('/dtype=') > -1?
+                h :
+                location.protocol + '//' + host + '/' + t + '/dtype=' + w +
+                    '/rnd=' + ((new Date()).getTime() + Math.round(Math.random()*100)) +
+                    (a?
+                        '/*' + (h.match(/^http/) ? h : location.protocol + '//' + location.host + (h.match('^/') ? h : '/' + h)) :
+                        '/*data=' + encodeURIComponent('url='+ encodeURIComponent((h.match(/^http/) ? h : location.protocol + '//' + location.host + (h.match('^/') ? h : '/' + h)))));
+        },
+        click = function() {
+            var head = document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0];
+            var script = document.createElement('script');
+            script.setAttribute('src', url(w, location.href, 'jclck'));
+            head.insertBefore(script, head.firstChild);
+        };
+
+    if (a) {
+        // для псевдоссылки и ссылки mailto просто считаем click, создавая iframe и в него грузим счётчик
+        if (a.className.match(/b-link_pseudo_yes/) || (a.href && a.href.match(/^mailto:/)) || (opts && opts.noRedirect === true)) {
+            click();
+        } else if (a.href) { // клик на ссылку, подменяем href на redir'овский, потом по таймауту обратно
+            var h = a.href;
+            a.href = url(w, h, "redir");
+            setTimeout(function() { a.href = h }, 500);
+        } else if (a.form) { // клик на элемент формы
+            if (a.type.match(/submit|button|image/)) { // клик на кнопку, подменяем action на redir'овский, потом по таймауту обратно
+                var h = a.form.action;
+                a.form.action = url(w, h, "redir", true);
+                setTimeout(function() { a.form.action = h }, 500);
+            } else { // просто считаем click, создавая iframe и в него грузим счётчик
+                click();
+            }
+        } else if (a.action) { //случай сабмита формы - подменяем его action на redir'овский, назад нам его менять не нужно
+            a.action = url(w, a.action, "redir", true);
+        } else {
+            throw "counter.js: not link and not form!";
+        }
+    } else { // ссылки нет, просто учёт показа, создаём iframe и в него грузим счётчик
+        click();
+    }
+}
+
+})(window.Lego);
+
+(function(Lego){
+if (!Lego) Lego = window.Lego = {};
+
+/**
+ * Параметризованный счётчик клика на ссылку или просто показа.
+ * Перевызывает Lego.c(w, a) из counter.js
+ *
+ * В случае клика подменяет href на redir'овский, потом по таймауту возвращает его обратно.
+ *
+ * В случае учёта показа динамически создаёт iframe с URL системы учёта.
+ *
+ * Пример использования:
+ *
+ * <a href="http://meteoinfo.ru" onclick="Lego.cp(0,1917,'weather.tabs.fotki',this)">Гидрометцентр</a>
+ *
+ * или
+ *
+ * < script type="text/javascript">Lego.cp(0,1917,'weather.tabs.fotki')< /script>
+ *
+ * @param pi    номер проекта (pid)
+ * @param ci    номер счётчика (cid)
+ * @param p     (optional) parameter
+ * @param a     (optional) ссылка, клик на которую надо учитывать
+ * @param opts  (optional) opts.noRedirect = true обрабатывает клик по обычной ссылке, как по b-link_pseudo_yes
+ */
+Lego.cp = function(pi, ci, p, a, opts) {
+    Lego.c('stred/pid=' + pi + '/cid=' + ci + (p ? '/path=' + p : ''), a, opts);
+}
+
+})(window.Lego);
+
+(function(Lego){
+if (!Lego) Lego = window.Lego = {};
+
+/**
+ * Параметризованный счётчик клика на ссылку в шапке. Перевызывает cp(w, a) из counter-cp.js
+ * Используется для уменьшения веса страницы.
+ *
+ * Пример использования:
+ *
+ * <a href="http://meteoinfo.ru" onclick="ch('weather.tabs.fotki',this)">Гидрометцентр</a>
+ *
+ * или
+ *
+ * < script type="text/javascript">ch('weather')< /script>
+ *
+ * @param p     parameter
+ * @param a     (optional) ссылка, клик на которую надо учитывать
+ */
+Lego.ch = function(p, a) {
+    BEM.blocks['i-global'].param('show-counters') && Lego.cp(0, 2219, p, a);
+}
+
+})(window.Lego);
+;
+/* ../../lego/blocks-common/i-counter/i-counter.js: end */ /**/
+
+/* ../../lego/blocks-common/i-common/cookie/i-common__cookie.js: begin */ /**/
+(function(Lego){
+if (!Lego) Lego = window.Lego = {};
+
+Lego.getCookie = function(n) {
+    var c = document.cookie;
+    if (c.length < 1) return false;
+
+    var b = c.indexOf(n + '=');
+    if (b == -1) return false;
+
+    b += (n.length + 1);
+    var e = c.indexOf(';', b);
+
+    return decodeURIComponent((e == -1) ? c.substring(b) : c.substring(b, e));
+}
+
+})(window.Lego);
+;
+/* ../../lego/blocks-common/i-common/cookie/i-common__cookie.js: end */ /**/
+
+/* ../../lego/blocks-common/i-common/init/i-common__init.js: begin */ /**/
+(function($, Lego){
+if (!Lego) Lego = window.Lego = {};
+// Использует cookie.js и check-session.js. Без них не работает.
+
+/**
+ * Инициализирует Лего некоторыми параметрами (для вариативности в пределах разных страниц).
+ *
+ * @param params объект Лего-параметров, необходимые параметры инициализируются умолчательными значениями
+ *        params.login логин текущего пользователя ('' для неавторизованного)
+ *        params.locale двухбуквенный код локали в нижнем регистре
+ *        params.id идентификатор сервиса
+ *        params['show-counters-percent'] процент срабатывания счётчиков Lego.ch() (по умолчанию 100)
+ *
+ * @return возвращает установленные параметры с учетом умолчательных значений
+ */
+Lego.init || (Lego.init = function(params) {
+    (params = Lego.params = $.extend(
+        {
+            id : '',
+            login : Lego.isSessionValid() ? Lego.getCookie('yandex_login') || '' : '',
+            yandexuid : Lego.getCookie('yandexuid'),
+            locale : 'ru',
+            retpath : window.location.toString(),
+            'passport-host' : '//passport.yandex.ru',
+            'pass-host' : '//pass.yandex.ru',
+            'passport-msg' : params.id,
+            'social-host' : '//social.yandex.ru',
+            'lego-path' : '/lego',
+            'show-counters-percent' : 100
+        },
+        params,
+        Lego.params))
+        ['show-counters'] = Math.round(Math.random() * 100) <= params['show-counters-percent'];
+
+    BEM.blocks['i-global']._params || $.extend(BEM.blocks['i-global']._params = {}, params);
+
+    $(function(){
+        params.oframebust && Lego.oframebust(params.oframebust);
+    });
+
+    return params;
+});
+
+Lego.block || (Lego.block = {});
+
+Lego.blockInit || (Lego.blockInit = function(context, blockSelector) {
+    context = context || document;
+    blockSelector = blockSelector || '.g-js';
+    $(context).find(blockSelector).each(function(){
+        var block = $(this),
+            params = this.onclick ? this.onclick() : {},
+            name = params.name || '',
+            init = Lego.block[name];
+        if (init && !block.data(name)) {
+            init.call(block, params);
+            block
+                .data(name, true)
+                .addClass(name + '_js_inited');
+        }
+    });
+});
+
+Lego.blockInitBinded || (Lego.blockInitBinded = !!$(document).ready(function(){ Lego.blockInit() }));
+
+})(jQuery, window.Lego);
+;
+/* ../../lego/blocks-common/i-common/init/i-common__init.js: end */ /**/
+
+/* ../../lego/blocks-common/i-common/i-common.js: begin */ /**/
+(function(Lego){
+if (!Lego) Lego = window.Lego = {};
+
+Lego.messages = Lego.messages || {};
+
+Lego.message = function(id, text) {
+    return Lego.params.locale == 'ru' ? text : (Lego.messages[id] || text);
+};
+
+})(window.Lego);;
+/* ../../lego/blocks-common/i-common/i-common.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-bem/__dom/_init/i-bem__dom_init_auto.js: begin */ /**/
+/* дефолтная инициализация */
+$(function() {
+    BEM.DOM.init();
+});;
+/* ../../lego/bem-bl/blocks-common/i-bem/__dom/_init/i-bem__dom_init_auto.js: end */ /**/
+
+/* ../../blocks-desktop/b-page/b-page.js: begin */ /**/
+if (!("onhashchange" in window) || $.browser.msie) { 
+    var prevHash = window.location.hash;
+    window.setInterval(function () {
+       if (window.location.hash != prevHash) {
+          storedHash = window.location.hash;
+            $(window).trigger('hashchange');
+       }
+    }, 100);
+}
+
+
+BEM.DOM.decl('b-page', {
+    HASH: ['index', 'faq', 'interface-development', 'interface-design', 'javascript'],
+
+    onSetMod: {
+        'js': function(){
+            var self = this;
+            self._bMenu = self.findBlockInside('b-menu');
+            _menuItems = self._bMenu.elem('item');
+
+            self._menuItems = {};
+
+            _menuItems.map(function(i){
+                var item = _menuItems.eq(i);
+                self._menuItems[item.data('hash')] = item;
+
+            });
+
+            texts = self.findBlocksInside('b-static-text');
+
+            self._texts = {};
+            for (var i = 0; i < texts.length; i++){
+                var item = texts[i];
+                self._texts[item.domElem.data('hash')] = item;
+            };
+
+            this.bindToWin('hashchange', self._hashChange);
+            self._hashChange();
+        }
+    },
+
+    _hashChange: function(){
+        var self = this;
+
+        if (self._current) {
+            self._flushOld();
+        }
+
+        self._pageHash = window.location.hash.substring(1);
+        if (self.HASH.indexOf(self._pageHash) == -1) {
+            self._pageHash = 'index';
+        }
+
+        self._current = self._pageHash;
+
+        self._showPage(self._pageHash);
+    },
+
+    _showPage: function(page){
+        this._bMenu.setMod(this._menuItems[page], 'state', 'current');
+        this._texts[page].setMod('visible', 'yes');
+    },
+    _flushOld: function(){
+        this._bMenu.delMod(this._menuItems[this._current], 'state');
+        this._texts[this._current].delMod('visible')
+    }
+});
+;
+/* ../../blocks-desktop/b-page/b-page.js: end */ /**/
+
+/* ../../lego/bem-bl/blocks-common/i-jquery/__leftclick/i-jquery__leftclick.js: begin */ /**/
+/**
+ * leftClick event plugin
+ *
+ * Copyright (c) 2010 Filatov Dmitry (alpha@zforms.ru)
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * @version 1.0.0
+ */
+
+(function($) {
+
+var leftClick = $.event.special.leftclick = {
+
+    setup : function() {
+
+        $(this).bind('click', leftClick.handler);
+
+    },
+
+    teardown : function() {
+
+        $(this).unbind('click', leftClick.handler);
+
+    },
+
+    handler : function(e) {
+
+        if(!e.button) {
+            e.type = 'leftclick';
+            $.event.handle.apply(this, arguments);
+            e.type = 'click';
+        }
+
+    }
+
+};
+
+})(jQuery);;
+/* ../../lego/bem-bl/blocks-common/i-jquery/__leftclick/i-jquery__leftclick.js: end */ /**/
+
+/* ../../lego/blocks-desktop/b-link/b-link.js: begin */ /**/
+/** @requires BEM */
+/** @requires BEM.HTML */
+
+BEM.HTML.decl('b-link', {
+    onBlock: function(ctx) {
+        ctx
+            .tag('a')
+            .attr('href', ctx.param('url'));
+
+        var props = ['title', 'target'], p;
+        while(p = props.pop()) ctx.param(p) && (ctx.attr(p, ctx.param(p)));
+    }
+});
+;
+/* ../../lego/blocks-desktop/b-link/b-link.js: end */ /**/
+
+/* ../../lego/blocks-desktop/b-icon/b-icon.js: begin */ /**/
+BEM.HTML.decl('b-icon', {
+
+    onBlock : function(ctx) {
+
+        var a = { src: '//yandex.st/lego/_/La6qi18Z8LwgnZdsAr1qy1GwCwo.gif', alt: '' },
+            params = ctx.params(),
+            props = ['alt', 'width', 'height'], p;
+
+        params.url && (a.src = params.url);
+        while(p = props.shift()) params[p] && (a[p] = params[p]);
+
+        ctx
+           .tag('img')
+           .attrs(a);
+
+    }
+
+});
+;
+/* ../../lego/blocks-desktop/b-icon/b-icon.js: end */ /**/
+
+
+
+// XXX: Support tanker-like syntax of keys in `i-bem__i18n`
+// i18n['prj']['keyset']['key'](params);
+var i18n = i18n || {};
+
+(function(bem_, undefined) {
+
+var cache = {},
+    // {String[]} A stack used for restoring context with dynamic keysets
+    stack = [],
+    /** {String} */
+    MOD_DELIM = '_',
+    /** {String} */
+    ELEM_DELIM = '__',
+    /** {String} */
+    DEFAULT_LANG = 'ru';
+
+function bemName(decl) {
+
+    typeof decl === 'string' && (decl = { block: decl });
+
+    return decl.block +
+        (decl.elem ? (ELEM_DELIM + decl.elem) : '') +
+        (decl.modName ? MOD_DELIM + decl.modName + MOD_DELIM + decl.modVal : '');
+
+}
+
+function bemParse(name) {
+
+    var bemitem = {};
+
+    name.split(ELEM_DELIM).forEach(function(item, i) {
+        var keys = [ i ? 'elem' : 'block', 'mod', 'val' ];
+
+        item.split(MOD_DELIM).forEach(function(part, j) {
+            bemitem[keys[j]] = part;
+        });
+    });
+
+    return bemitem;
+
+}
+
+function _pushStack(name) {
+    if(!name) return false;
+
+    var len = stack.length;
+    return !(len && stack[len - 1] === name) && stack.push(name);
+}
+
+function _popStack(name) {
+    var len = stack.length;
+    return len && stack[len - 1] !== name && stack.pop();
+}
+
+/**
+ * @constructor
+ */
+function _i18n() {
+    this._lang = '';
+    this._prj = 'lego'; // FIXME: bem-bl?
+    this._keyset = '';
+    this._key = '';
+}
+
+_i18n.prototype = {
+
+    lang : function(name) {
+        this._lang = name;
+        return this;
+    },
+
+    project : function(name) {
+        this._prj = name;
+        return this;
+    },
+
+    keyset : function(name) {
+        _pushStack(this._keyset);
+
+        this._keyset = bemName(name);
+        return this;
+    },
+
+    key : function(name) {
+        this._key = name;
+        return this;
+    },
+
+    /**
+     * FIXME: Move legacy-syntax support into separat method
+     * @param {Object|Function} v
+     */
+    decl : function(v) {
+        var bemitem = bemParse(this._keyset),
+            // tanker legacy syntax
+            prj = bemitem.block === 'i-tanker' ? 'tanker' : this._prj,
+            keyset = bemitem.elem || this._keyset,
+            key = this._key;
+
+        prj = i18n[prj] || (i18n[prj] = {});
+        keyset = prj[keyset] || (prj[keyset] = {});
+        keyset[key] = typeof v === 'function' ? v : (function(p) { return (v); });
+
+        // `BEM.I18N` syntax
+        var l = cache[this._lang] || (cache[this._lang] = {}),
+            k = l[this._keyset] || (l[this._keyset] = {});
+
+        k[key] = v;
+    },
+
+    val : function(params, thisCtx) {
+        var value = cache[this._lang] && cache[this._lang][this._keyset];
+        if(!value) {
+            console && console.log &&
+                console.log("[Error] keyset: " + this._keyset + " key: " + this._key + " (lang: " + this._lang + ")");
+            return '';
+        }
+
+        value = value[this._key];
+        if(!value) return '';
+
+        try{
+            return typeof value === 'string' ?
+                value : thisCtx ? value.call(thisCtx, params) : value.call(this, params);
+        } catch(e) {
+            throw "[Error] keyset: " + this._keyset + " key: " + this._key + " (lang: " + this._lang + ")";
+        }
+    },
+
+    _c : function() { return cache; }
+
+};
+
+/**
+ * @namespace
+ * @lends BEM.I18N
+ */
+bem_.I18N = (function(base) {
+
+    /**
+     * Shortcut to get key value
+     *
+     * @param {String|Object} keyset
+     * @param {String} key
+     * @param {Object} [params]
+     * @return {String}
+     */
+    var klass = function(keyset, key, params) {
+        return klass.keyset(keyset).key(key, params);
+    };
+
+    ['project', 'keyset'].forEach(function(p) {
+        klass[p] = function(v) { this._i18n[p](v); return this; };
+    });
+
+    /**
+     * @param {String} name Key name
+     * @param {Object} params
+     * @return {String}
+     */
+    klass.key = function(name, params) {
+        var proto = this._i18n,
+            _keyset, result;
+
+        proto.lang(this._currentLang).key(name);
+
+        result = proto.val.call(proto, params, klass);
+
+        // восстанавливаем значение предыдущего кейсета, если нужно
+        _keyset = _popStack(proto._keyset);
+        _keyset && proto.keyset(_keyset);
+
+        return result;
+    };
+
+    /**
+     * Declaration of translations
+     *
+     * @param {String|Object} bemitem
+     * @param {Object} keysets
+     * @param {Object} [declProps] declaration params
+     */
+    klass.decl = function(bemitem, keysets, declProps) {
+        var proto = this._i18n, k;
+
+        declProps || (declProps = {});
+        declProps.lang && proto.lang(declProps.lang);
+
+        proto.keyset(bemitem);
+
+        for(k in keysets)
+            proto.key(k).decl(keysets[k]);
+
+        return this;
+    };
+
+    /**
+     * Get/set current language
+     *
+     * @param {String} [lang]
+     * @return {String}
+     */
+    klass.lang = function(lang) {
+        typeof lang !== undefined
+            && (this._currentLang = lang);
+
+        return this._currentLang;
+    };
+
+    klass._i18n = base;
+
+    klass._currentLang = DEFAULT_LANG;
+
+    return klass;
+
+}(new _i18n()));
+
+/** Global */
+BEM = this.BEM = bem_;
+
+})(typeof BEM === 'undefined' ? {} : BEM);
+
+BEM.I18N.lang('ru');
+
+}
