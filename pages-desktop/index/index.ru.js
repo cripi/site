@@ -1674,8 +1674,8 @@ function join(a, b) {
 
 }
 
-var attrEscapes = { '\'' : '\\\'', '"': '\'', '&': '&amp;', '<': '&lt;', '>': '&gt;' },
-    attrEscapesRE = /['"&<>]/g;
+var attrEscapes = { '"': '&quot;', '&': '&amp;', '<': '&lt;', '>': '&gt;' },
+    attrEscapesRE = /["&<>]/g;
 function escapeAttr(attrVal) {
     return attrVal.replace(attrEscapesRE, function(needToEscape) {
         return attrEscapes[needToEscape];

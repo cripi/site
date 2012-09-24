@@ -1,5 +1,5 @@
 (function(){this._ycssjs||(this._ycssjs=function(k, f){return !(k in _ycssjs||_ycssjs[k]++)})})();
-if(_ycssjs('vB2eFkb0LNlDHsrRTm0QVxFwlQQ')){
+if(_ycssjs('cZZlcpuP9AMY99OgCCCc48uYJ28')){
 /* ../../lego/bem-bl/blocks-common/i-jquery/__inherit/i-jquery__inherit.js: begin */ /**/
 /**
  * Inheritance plugin
@@ -1676,8 +1676,8 @@ function join(a, b) {
 
 }
 
-var attrEscapes = { '\'' : '\\\'', '"': '\'', '&': '&amp;', '<': '&lt;', '>': '&gt;' },
-    attrEscapesRE = /['"&<>]/g;
+var attrEscapes = { '"': '&quot;', '&': '&amp;', '<': '&lt;', '>': '&gt;' },
+    attrEscapesRE = /["&<>]/g;
 function escapeAttr(attrVal) {
     return attrVal.replace(attrEscapesRE, function(needToEscape) {
         return attrEscapes[needToEscape];

@@ -2,6 +2,13 @@ block b-ffoot {
     content: {
         elem: 'inner',
         mix: [{ block: 'i-clearfix' }],
-        content: this.ctx.content
+        content: {
+            elem: 'ololo',
+            content: this.ctx.content
+        }
+    }
+
+    default: {
+        apply( this.ctx.content.attrs = {'type': 'ololo'}, '')
     }
 }
