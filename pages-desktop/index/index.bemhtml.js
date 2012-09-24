@@ -1,6 +1,8 @@
 var BEMHTML = (function(exports) {var __r7,__r9,__r11,__r13,__r15,__r17,__r19,__r21,__r31,__r32,__r34,__r35,__r39,__r41,__r42,__r44,__r45,__r46,__r48,__r49,__r50,__r60,__r61,__r62;exports.apply = apply;function apply(c) {
 var __this = this;
-if((! (! this["elem"])) === false && this["block"] === "b-ffoot" && this["_mode"] === "content") {return ({"elem": "inner","mix": [({"block": "i-clearfix"})],"content": ({"elem": "ololo","content": this["ctx"]["content"]})});return}
+if((! (! this["elem"])) === false && this["block"] === "b-icon" && this["_mode"] === "attrs") {{var ctx = this["ctx"],a = ({"src": "//yandex.st/lego/_/La6qi18Z8LwgnZdsAr1qy1GwCwo.gif","alt": ""}),props = ["alt","width","height"],p;(ctx["url"] && (a["src"]=ctx["url"]));while((p=props["shift"]())){(ctx[p] && (a[p]=ctx[p]))}return a};return}
+if((! (! this["elem"])) === false && this["block"] === "b-icon" && this["_mode"] === "tag") {return "img";return}
+if((! (! this["elem"])) === false && this["block"] === "b-ffoot" && this["_mode"] === "content") {return ({"elem": "inner","mix": [({"block": "i-clearfix"})],"content": this["ctx"]["content"]});return}
 if((! (! this["elem"])) === false && this["block"] === "b-link" && this["_mode"] === "attrs") {{var ctx = this["ctx"],props = ["title","target"],p = (typeof ctx["url"]),a = ({"href": (((p === "undefined") || (p === "string"))?ctx["url"]:(((p=[]) , (((((((((((("" , (__r60=this["_buf"])) , (this["_buf"]=p)) , (__r61=this["_mode"])) , (this["_mode"]="")) , (__r62=this["ctx"])) , (this["ctx"]=ctx["url"])) , (__r63=apply.call(__this))) , (this["_buf"]=__r60)) , (this["_mode"]=__r61)) , (this["ctx"]=__r62)) , "") , __r63)) , p["join"]("")))});while((p=props["pop"]())){(ctx[p] && (a[p]=ctx[p]))}return a};return}
 if((! (! this["elem"])) === false && this["block"] === "b-link" && this["_mode"] === "tag") {return "a";return}
 if(this["block"] === "b-menu" && this["elem"] === "title" && this["_mode"] === "tag") {return "h2";return}
