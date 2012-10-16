@@ -1,0 +1,15 @@
+Source: cripi-frontend
+Priority: extra
+Maintainer: Denis Chistyakov (dench) <dench@yandex-team.ru>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.2
+Section: yandex
+Homepage: http://cripi.ru
+#Vcs-Git: git://github.yandex-team.ru/mokhov/cripi.git
+#Vcs-Browser: https://github.yandex-team.ru/mokhov/cripi
+
+Package: cripi-frontend
+Architecture: any
+Depends: nginx
+Description: Yekaterinburg`s site about courses of user interface development
+ 
