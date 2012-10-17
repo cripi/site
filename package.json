@@ -12,6 +12,10 @@
     "node": "0.8.x"
   },
   "dependencies": {
-    "http-server": "*"
+    "http-server": "*",
+    "bem": ">= 0.5.9",
+    "dom-js": ">= 0.0.6",
+    "xjst": ">= 0.2.x",
+    "ometajs": ">= 0.3.x"
   }
 }
